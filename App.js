@@ -34,43 +34,44 @@ export default class App extends Component{
 
     winGame = () => {
         // Проверка всех вариантов победы (8 вариантов: 3 по горизонтали, 3 по вертикали, 2 по диагонали)
-    if( (this.state.imagesId[0] === this.state.imagesId[1] && this.state.imagesId[0] === this.state.imagesId[2]) ||
-        (this.state.imagesId[3] === this.state.imagesId[4] && this.state.imagesId[3] === this.state.imagesId[5]) ||
-        (this.state.imagesId[6] === this.state.imagesId[7] && this.state.imagesId[6] === this.state.imagesId[8]) ||
-        (this.state.imagesId[0] === this.state.imagesId[3] && this.state.imagesId[0] === this.state.imagesId[6]) ||
-        (this.state.imagesId[1] === this.state.imagesId[4] && this.state.imagesId[1] === this.state.imagesId[7]) ||
-        (this.state.imagesId[2] === this.state.imagesId[5] && this.state.imagesId[2] === this.state.imagesId[8]) ||
-        (this.state.imagesId[0] === this.state.imagesId[4] && this.state.imagesId[0] === this.state.imagesId[8]) ||
-        (this.state.imagesId[2] === this.state.imagesId[4] && this.state.imagesId[2] === this.state.imagesId[6]) ){
-        // Вызов Алерта на смартфоне
-        Alert.alert(
-            "Конец игры!",
-            "Победили " + (this.state.step ? 'КРЕСТИКИ' : 'НоЛиКи'),
-            [
-                { text: "Заново", onPress: () => this.resrartGame() }
-            ]
-        )
-    }
-    else {
-        // Если Никто не выиграл и все клетки нажаты, то ничья.
-        if (this.state.count == 9){
+        if ((this.state.imagesId[0] === this.state.imagesId[1] && this.state.imagesId[0] === this.state.imagesId[2]) ||
+            (this.state.imagesId[3] === this.state.imagesId[4] && this.state.imagesId[3] === this.state.imagesId[5]) ||
+            (this.state.imagesId[6] === this.state.imagesId[7] && this.state.imagesId[6] === this.state.imagesId[8]) ||
+            (this.state.imagesId[0] === this.state.imagesId[3] && this.state.imagesId[0] === this.state.imagesId[6]) ||
+            (this.state.imagesId[1] === this.state.imagesId[4] && this.state.imagesId[1] === this.state.imagesId[7]) ||
+            (this.state.imagesId[2] === this.state.imagesId[5] && this.state.imagesId[2] === this.state.imagesId[8]) ||
+            (this.state.imagesId[0] === this.state.imagesId[4] && this.state.imagesId[0] === this.state.imagesId[8]) ||
+            (this.state.imagesId[2] === this.state.imagesId[4] && this.state.imagesId[2] === this.state.imagesId[6])) {
+            // Вызов Алерта на смартфоне
             Alert.alert(
-                "Ничья!",
-                "Победила ДРУЖБА",
+                "Конец игры!",
+                "Победили " + (this.state.step ? 'КРЕСТИКИ' : 'НоЛиКи'),
                 [
-                    { text: "Заново", onPress: () => this.resrartGame() }
+                    {text: "Заново", onPress: () => this.resrartGame()}
                 ]
             )
+        } else {
+            // Если Никто не выиграл и все клетки нажаты, то ничья.
+            if (this.state.count == 9) {
+                Alert.alert(
+                    "Ничья!",
+                    "Победила ДРУЖБА",
+                    [
+                        {text: "Заново", onPress: () => this.resrartGame()}
+                    ]
+                )
+            }
         }
     }
-  }
     // Метод задания картинки на клетке.
     reverseImage=(prop)=>{
         // Если ход крестиков.
         if (this.state.step === true) {
             // Если ранее не нажата.
             if(this.state.states[prop]) {
-                this.state.step = false
+                this.setState({
+                    step : false
+                })
                 this.state.images[prop] = krest
                 this.state.imagesId[prop] = 1
                 this.state.states[prop] = false
@@ -80,7 +81,9 @@ export default class App extends Component{
         // Если ход ноликов.
         else{
             if(this.state.states[prop]) {
-                this.state.step = true
+                this.setState({
+                    step : true
+                })
                 this.state.images[prop] = circle
                 this.state.imagesId[prop] = 2
                 this.state.states[prop] = false
