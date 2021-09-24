@@ -3,7 +3,7 @@ import { StyleSheet, View, Image, TouchableOpacity } from "react-native";
 import { MainButton } from './MainButton';
 
 // Images
-import icon from '../../assets/icon.png';
+import icon from '../../../assets/icon.png';
 
 export const MainScreen = (props) => {
     return (

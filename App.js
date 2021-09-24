@@ -1,9 +1,9 @@
 import React, { Component, useState } from 'react';
 import { StyleSheet, View, Image, Text, TouchableOpacity, Alert } from 'react-native';
-import { MainScreen } from './src/MainScreen/MainScreen';
-import { TableScreen } from './src/TableScreen/TableScreen';
-import { SingleGameScreen } from './src/SingleGameScreen/SingleGameScreen';
-import { PlayersGameScreen } from './src/PlayersGameScreen/PlayersGameScreen';
+import { MainScreen } from './src/Screens/MainScreen/MainScreen';
+import { TableScreen } from './src/Screens/TableScreen/TableScreen';
+import { SingleGameScreen } from './src/Screens/SingleGameScreen/SingleGameScreen';
+import { PlayersGameScreen } from './src/Screens/PlayersGameScreen/PlayersGameScreen';
 
 
 export default class App extends Component {
@@ -13,7 +13,7 @@ export default class App extends Component {
         super();
 
         this.state = {
-            screen : 0,
+            screen: '',
         }
     }
 
@@ -26,9 +26,9 @@ export default class App extends Component {
     asScreen = (prop) => {
         switch (prop){
             case 1:
-                return (<SingleGameScreen/>)
+                return (<SingleGameScreen changeState={this.changeState}/>)
             case 2:
-                return (<PlayersGameScreen/>)
+                return (<PlayersGameScreen changeState={this.changeState}/>)
             case 3:
                 return (<TableScreen/>)
             default:
