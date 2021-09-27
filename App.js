@@ -30,7 +30,7 @@ export default class App extends Component {
             case 2:
                 return (<TwoPlayersScreen changeState={this.changeState}/>)
             case 3:
-                return (<TableScreen/>)
+                return (<TableScreen changeState={this.changeState} />)
             default:
                 return (<MainScreen changeState={this.changeState}/>)
         }
