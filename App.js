@@ -2,8 +2,8 @@ import React, { Component, useState } from 'react';
 import { StyleSheet, View, Image, Text, TouchableOpacity, Alert } from 'react-native';
 import { MainScreen } from './src/Screens/MainScreen/MainScreen';
 import { TableScreen } from './src/Screens/TableScreen/TableScreen';
-import { SingleGameScreen } from './src/Screens/SingleGameScreen/SingleGameScreen';
-import { PlayersGameScreen } from './src/Screens/PlayersGameScreen/PlayersGameScreen';
+import { SinglePlayerScreen } from './src/Screens/SinglePlayerScreen/SinglePlayerScreen';
+import { TwoPlayersScreen } from './src/Screens/TwoPlayersScreen/TwoPlayersScreen';
 
 
 export default class App extends Component {
@@ -26,9 +26,9 @@ export default class App extends Component {
     asScreen = (prop) => {
         switch (prop){
             case 1:
-                return (<SingleGameScreen changeState={this.changeState}/>)
+                return (<SinglePlayerScreen changeState={this.changeState}/>)
             case 2:
-                return (<PlayersGameScreen changeState={this.changeState}/>)
+                return (<TwoPlayersScreen changeState={this.changeState}/>)
             case 3:
                 return (<TableScreen/>)
             default:
