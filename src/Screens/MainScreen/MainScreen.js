@@ -10,9 +10,9 @@ export const MainScreen = (props) => {
         <View style={ styles.navBar }>
             <Image style={ styles.navImage } source={icon}/>
             <View style={ styles.mainBtns}>
-                <MainButton title={'Одиночная игра'} id={1} changeState={props.changeState}/>
-                <MainButton title={'Игра на двоих'} id={2} changeState={props.changeState}/>
-                <MainButton title={'История игр'} id={3} changeState={props.changeState}/>
+                <MainButton title={'Одиночная игра'} id={1} changeScreen={props.changeScreen}/>
+                <MainButton title={'Игра на двоих'} id={2} changeScreen={props.changeScreen}/>
+                <MainButton title={'История игр'} id={3} changeScreen={props.changeScreen}/>
             </View>
         </View>
     )

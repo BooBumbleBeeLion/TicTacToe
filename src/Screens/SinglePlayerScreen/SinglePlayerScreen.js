@@ -2,19 +2,19 @@ import React from "react";
 import { StyleSheet, View, Image, TouchableOpacity,Text } from "react-native";
 import {PlayField} from '../../PlayField/PlayField'
 import {CountDisplay} from "../Widgets/CountDisplay";
+import {BackBtnTop} from "../Widgets/BackBtnTop";
+import {TwoPlayersScreen} from "../TwoPlayersScreen/TwoPlayersScreen";
 
 export const SinglePlayerScreen = (props) => {
     return (
         <View style={styles.container}>
+            <BackBtnTop changeScreen={props.changeScreen}/>
             <View style={styles.playersView}>
                 {/* Короче text-выводимый текст; player- с какой он стороны; move-чей щас ход; person-какую картинку ставить*/}
-                <CountDisplay text={999} player={'left'} move={true} person={'human'}/>
-                <CountDisplay text={666} player={'right'} move={false} person={'bot'}/>
+                <CountDisplay text={props.leftScore} player={'left'} move={props.states.move} person={'human'} states={props.states}/>
+                <CountDisplay text={props.rightScore} player={'right'} move={!props.states.move} person={'bot'} states={props.states}/>
             </View>
-            <PlayField style={styles.playField}/>
-            <TouchableOpacity style={styles.btnChild} onPress={() => props.changeState(0)}>
-                <Text style={styles.btnText}> Назад </Text>
-            </TouchableOpacity>
+            <PlayField state={props.states} changeImage={props.changeImage} getImage={props.getImage}/>
         </View>
     )
 }
@@ -28,13 +28,12 @@ const styles = StyleSheet.create({
         padding: 20
     },
     playersView: {
+        flex: .4,
         flexDirection: 'row',
+        alignItems: 'center',
         justifyContent: 'space-between',
-        width: '100%'
-    },
-    playField: {
-        flex: 1,
-        bottom: 50
+        width: '100%',
+        //backgroundColor: '#000000'
     },
     btnChild: {
         height: 70,

@@ -3,7 +3,7 @@ import {StyleSheet, View, TouchableOpacity, Text, Alert} from "react-native";
 
 export const MainButton = (props) => {
     return (
-        <TouchableOpacity style={styles.btnChild} onPress={() => props.changeState(props.id)}>
+        <TouchableOpacity style={styles.btnChild} onPress={() => props.changeScreen(props.id)}>
             <Text style={styles.btnText}> {props.title} </Text>
         </TouchableOpacity>
     )

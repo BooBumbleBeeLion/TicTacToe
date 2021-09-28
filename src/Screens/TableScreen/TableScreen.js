@@ -1,16 +1,11 @@
 import React from "react";
 import { StyleSheet, View, Image, TouchableOpacity,Text } from "react-native";
-
-// Images
-import icon from '../../../assets/icon.png';
+import {BackBtnTop} from "../Widgets/BackBtnTop";
 
 export const TableScreen = (props) => {
     return (
         <View style={ styles.container }>
-            <Text>TableScreen</Text>
-            <TouchableOpacity style={styles.btnChild} onPress={() => props.changeState(0)}>
-                <Text style={styles.btnText}> Назад </Text>
-            </TouchableOpacity>
+            <BackBtnTop changeScreen={props.changeScreen}/>
         </View>
     )
 }

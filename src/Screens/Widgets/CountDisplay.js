@@ -16,7 +16,7 @@ export const CountDisplay = (props) => {
                 right: asStyle('right',props.player),
                 alignItems: asStyle('alignItems',props.player),
             }}>
-                <Text style={styles.text}>{props.player}</Text>
+                <Text style={styles.text}>{props.text}</Text>
             </View>
         </View>
     )
@@ -24,7 +24,7 @@ export const CountDisplay = (props) => {
 // Метод для задания размеров картинки взависимости от того чей ход
 const asMove = (style,move) => {
     if (move){
-        return (style === 'width') ? 102 : 125
+        return (style === 'width') ? 100 : 120
     } else {
         return (style === 'width') ? 82 : 100
     }
