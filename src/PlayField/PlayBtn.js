@@ -1,15 +1,10 @@
-import React, { Component } from 'react';
-import { StyleSheet, View, Image, Text, TouchableOpacity, Alert } from 'react-native';
-
-//Images
-import krest from '../../res/krest.png';
-import circle from '../../res/circle.png';
+import React from 'react';
+import { StyleSheet, Image, TouchableOpacity } from 'react-native';
 
 export const PlayBtn = (props) => {
     return (
         <TouchableOpacity style={styles.ticButton} onPress={() => props.changeImage(props.btnId)}>
-            {/*<Text style={styles.text}>  </Text>*/}
-            <Image style={styles.image} source={props.getImage(props.btnId)}/>
+            <Image style={styles.image} source={props.images[props.btnId]}/>
         </TouchableOpacity>
     )
 }

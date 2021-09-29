@@ -1,19 +1,25 @@
-import React from "react";
-import { StyleSheet, View, TouchableOpacity, Text } from "react-native";
-import { CountDisplay } from '../Widgets/CountDisplay'
-import { PlayField } from "../../PlayField/PlayField"
-import {BackBtnTop} from "../Widgets/BackBtnTop";
+import React, {useState} from "react";
+import { StyleSheet, View } from "react-native";
+import { PlayField } from '../../PlayField/PlayField'
+import { CountDisplay } from "../Widgets/CountDisplay";
+import { BackBtnTop } from "../Widgets/BackBtnTop";
 
-export const TwoPlayersScreen = (props) => {
+export const GameScreen = (props) => {
+
+    const [move,setMove] = useState(true)
+    const [leftScore,setLeftScore] = useState(0)
+    const [rightScore,setRightScore] = useState(0)
+
     return (
         <View style={styles.container}>
             <BackBtnTop changeScreen={props.changeScreen}/>
             <View style={styles.playersView}>
                 {/* Короче text-выводимый текст; player- с какой он стороны; move-чей щас ход; person-какую картинку ставить*/}
-                <CountDisplay text={props.leftScore} player={'left'} move={props.states.move} person={'human'} states={props.states}/>
-                <CountDisplay text={props.rightScore} player={'right'} move={!props.states.move} person={'human'} states={props.states}/>
+                <CountDisplay text={leftScore} player={'left'} move={move} bot={false}/>
+                <CountDisplay text={rightScore} player={'right'} move={!move} bot={props.bot}/>
             </View>
-            <PlayField state={props.states} changeImage={props.changeImage} getImage={props.getImage}/>
+            <PlayField move={move} leftScore={leftScore} rightScore={rightScore}
+                       setMove={setMove} setLeftScore={setLeftScore} setRightScore={setRightScore}/>
         </View>
     )
 }

@@ -10,7 +10,7 @@ export const CountDisplay = (props) => {
             <Image style={{
                 width: asMove('width', props.move),
                 height: asMove('height', props.move),
-            }} source={ (props.person === 'human') ? athlete : bot }/>
+            }} source={ (props.bot) ? bot : athlete }/>
             <View style={{
                 ...styles.countDisplay,
                 right: asStyle('right',props.player),
