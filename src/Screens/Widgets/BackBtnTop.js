@@ -19,6 +19,7 @@ const styles = StyleSheet.create({
     mainView: {
         top: '3%',
         width: '100%',
+        marginBottom: 15
     },
     btnBack: {
         margin: 10,
