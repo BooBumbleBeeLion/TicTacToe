@@ -10,9 +10,10 @@ export const MainScreen = (props) => {
         <View style={ styles.navBar }>
             <Image style={ styles.navImage } source={icon}/>
             <View style={ styles.mainBtns}>
-                <MainButton title={'Одиночная игра'} id={1} changeScreen={props.changeScreen}/>
-                <MainButton title={'Игра на двоих'} id={2} changeScreen={props.changeScreen}/>
-                <MainButton title={'История игр'} id={3} changeScreen={props.changeScreen}/>
+                <MainButton title={'Последняя игра'} id={1} changeScreen={props.changeScreen}/>
+                <MainButton title={'Одиночная игра'} id={2} changeScreen={props.changeScreen}/>
+                <MainButton title={'Игра на двоих'} id={3} changeScreen={props.changeScreen}/>
+                <MainButton title={'История игр'} id={4} changeScreen={props.changeScreen}/>
             </View>
         </View>
     )
@@ -29,7 +30,7 @@ const styles = StyleSheet.create({
         //backgroundColor: '#FFFFFF',
     },
     mainBtns:{
-        marginTop: '15%',
+        marginTop: '10%',
         flexDirection: 'column',
     },
 })

@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, AsyncStorage } from 'react-native';
 import { MainScreen } from './src/Screens/MainScreen/MainScreen';
 import { GameScreen } from './src/Screens/GameScreen/GameScreen';
 import { TableScreen } from './src/Screens/TableScreen/TableScreen';
+import {LastGameScreen} from "./src/Screens/LastGameScreen/LastGameScreen";
 
 export default class App extends Component {
     // Конструктор для объявления state для дальнейшего его изменения.
@@ -25,10 +26,12 @@ export default class App extends Component {
     asScreen = (prop) => {
         switch (prop){
             case 1:
-                return (<GameScreen changeScreen={this.changeScreen} bot={true}/>)
+                return (<LastGameScreen changeScreen={this.changeScreen}/>)
             case 2:
-                return (<GameScreen changeScreen={this.changeScreen} bot={false}/>)
+                return (<GameScreen changeScreen={this.changeScreen} bot={true}/>)
             case 3:
+                return (<GameScreen changeScreen={this.changeScreen} bot={false}/>)
+            case 4:
                 return (<TableScreen changeScreen={this.changeScreen} />)
             default:
                 return (<MainScreen changeScreen={this.changeScreen}/>)

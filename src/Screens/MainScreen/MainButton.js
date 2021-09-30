@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
     btnChild: {
         height: 70,
         width: 300,
-        marginTop: '10%',
+        marginTop: '7.5%',
         alignItems: 'center',
         backgroundColor: '#D4DDE1',
         borderRadius: 20,

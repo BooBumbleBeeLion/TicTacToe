@@ -43,7 +43,7 @@ const asStyle = (style, player) => {
         case 'right':
             switch (player){
                 case 'left':
-                    return -40
+                    return -50
                 case 'right':
                     return 40
             }
@@ -66,9 +66,5 @@ const styles = StyleSheet.create({
     text:{
         fontWeight: 'bold',
         fontSize: 23
-    },
-    imagePlayerStyle: {
-        width: 123,
-        height: 150
     },
 })

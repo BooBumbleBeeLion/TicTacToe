@@ -17,7 +17,7 @@ export const BackBtnTop = (props) => {
 
 const styles = StyleSheet.create({
     mainView: {
-        top: '3%',
+        top: '5%',
         width: '100%',
         marginBottom: 15
     },
@@ -27,12 +27,12 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
     },
     image: {
-        height: 25,
-        width: 25,
+        height: 35,
+        width: 35,
     },
     text: {
         textAlignVertical: 'center',
         color: '#000000',
-        fontSize: 17,
+        fontSize: 20,
     },
 })

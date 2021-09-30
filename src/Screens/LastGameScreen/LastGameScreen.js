@@ -1,27 +1,54 @@
 import React, {useState} from "react";
-import { StyleSheet, View } from "react-native";
+import {AsyncStorage, StyleSheet, View} from "react-native";
 import { PlayField } from '../../PlayField/PlayField'
 import { CountDisplay } from "../Widgets/CountDisplay";
 import { BackBtnTop } from "../Widgets/BackBtnTop";
 
-export const GameScreen = (props) => {
-
+export const LastGameScreen = (props) => {
+    let result = ''
+    let person
+    const [bot,setBot] = useState(true)
     const [move,setMove] = useState(true)
-    const [leftScore,setLeftScore] = useState(0)
-    const [rightScore,setRightScore] = useState(0)
+    const [leftState,setLeftState] = useState('');
+    const [rightState,setRightState] = useState('');
+
+    loadLastWinnerData()
 
     return (
         <View style={styles.container}>
             <BackBtnTop changeScreen={props.changeScreen}/>
             <View style={styles.playersView}>
                 {/* Короче text-выводимый текст; player- с какой он стороны; move-чей щас ход; person-какую картинку ставить*/}
-                <CountDisplay text={leftScore} player={'left'} move={move} bot={false}/>
-                <CountDisplay text={rightScore} player={'right'} move={!move} bot={props.bot}/>
+                <CountDisplay text={leftState} player={'left'} move={move} bot={false}/>
+                <CountDisplay text={rightState} player={'right'} move={!move} bot={bot}/>
             </View>
-            <PlayField move={move} leftScore={leftScore} rightScore={rightScore} bot={props.bot} goPlay={true}
-                       setMove={setMove} setLeftScore={setLeftScore} setRightScore={setRightScore}/>
+            <PlayField goPlay={false} bot={props.bot}/>
         </View>
     )
+
+    async function loadLastWinnerData() {
+        try {
+            result = await AsyncStorage.getItem("lastWinner");
+            if(result === 'krest') {
+                setLeftState('Win')
+                setRightState('Lose')
+                setMove(true)
+            }
+            else {
+                setLeftState('Lose')
+                setRightState('Win')
+                setMove(false)
+            }
+            person = await AsyncStorage.getItem("lastWinnerPerson");
+            if(person === 'bot')
+                setBot(true)
+            else
+                setBot(false)
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
 }
 
 const styles = StyleSheet.create({
