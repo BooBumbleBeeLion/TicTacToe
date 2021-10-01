@@ -11,18 +11,16 @@ for (let i = 0; i < 20; i++){
         gameEnd: "WIN",
         date: Date.now(),
         gameType: "SINGLE PLAYER",
-        color: "#5C821A"
+        color: "#5C821A",
     })
 }
-{ /* */ }
 export const TableScreen = (props) => {
+    console.log(gameData[0])
     return (
         <View style={ styles.container }>
-            <BackBtnTop changeScreen={props.changeScreen} />
-            <View>
-
-            </View>
-            <FlatList 
+            <BackBtnTop style={ styles.backBtnTop}changeScreen={props.changeScreen} />
+            <FlatList
+                style={styles.flatList}
                 data={gameData}
                 renderItem={HistoryPlayItem}
                 showsVerticalScrollIndicator={false}
@@ -37,6 +35,12 @@ const styles = StyleSheet.create({
         width: '100%',
         alignItems: 'center',
         justifyContent: 'space-around',
-        padding: 25
+        padding: 20
     },
+    backBtnTop: {
+    },
+    flatList: {
+        top: '3%',
+        // backgroundColor:'#ffffff',
+    }
 })

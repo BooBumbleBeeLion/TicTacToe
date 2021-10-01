@@ -17,9 +17,8 @@ export const BackBtnTop = (props) => {
 
 const styles = StyleSheet.create({
     mainView: {
-        top: '5%',
+        top: '3%',
         width: '100%',
-        marginBottom: 15
     },
     btnBack: {
         margin: 10,
