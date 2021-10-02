@@ -26,12 +26,12 @@ export const CountDisplay = (props) => {
 }
 // Метод для задания размеров картинки взависимости от того чей ход
 const asMove = (style,move) => {
-    if (move){
+    if(move === null)
         return (style === 'width') ? 100 : 120
-    } else {
+    if (move)
+        return (style === 'width') ? 100 : 120
+    else
         return (style === 'width') ? 82 : 100
-    }
-
 }
 // Метод для задания позиционирования кружочка и картинки с отступами нужными
 const asStyle = (style, player) => {
@@ -56,18 +56,19 @@ const asStyle = (style, player) => {
 const styles = StyleSheet.create({
     countDisplay: {
         position: 'absolute',
-        width: 120,
-        height: 50,
+        width: '130%',
+        height: '17%',
         backgroundColor: '#FFD04A',
         justifyContent: 'center',
+        alignItems: 'center',
         padding: 20,
         borderRadius: 30,
         zIndex: -1,
-
         top: -5,
     },
     text:{
         fontWeight: 'bold',
-        fontSize: 23,
+        fontSize: 22,
+        // backgroundColor: '#000000'
     },
 })

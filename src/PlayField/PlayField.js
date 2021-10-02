@@ -3,28 +3,30 @@ import {StyleSheet, View, Alert, AsyncStorage} from 'react-native';
 import { PlayRow } from './PlayRow';
 import { GameData } from '../GameData';
 
-import krest from "../../res/krest.png";
-import circle from "../../res/circle.png";
+import krest from "../../assets/krest.png";
+import circle from "../../assets/circle.png";
 
 export const PlayField = (props) => {
     let lastGame = {}
     let outputGameData = {
+        id: 0,
         bot: false,
         winner: true,
         leftState: '',
         rightState: '',
         images: [],
+        date: '',
     }
     let [images,setImages] = useState([])
     let [imagesId,setImagesId] = useState([0,-1,-2,-3,-4,-5,-6,-7,-8])
     let [pressed,setPressed] = useState([])
     let [countPressed,setCountPressed] = useState(0)
+    let date = new Date()
 
     if(!props.goPlay){
         lastGame = GameData.getLastGame()
         if(lastGame !== null) {
             for (let i = 0; i < 9; i++) {
-                console.log(i + '][' + lastGame.images[i])
                 setStates(i, lastGame.images[i])
             }
         }
@@ -33,11 +35,9 @@ export const PlayField = (props) => {
     function setStates(i, item) {
         switch (item) {
             case 2:
-                console.log(i + '   ' + item)
                 makeMove(i, true)
                 break
             case 3:
-                console.log(i + '   ' + item)
                 makeMove(i, false)
                 break
             case undefined:
@@ -48,7 +48,6 @@ export const PlayField = (props) => {
     }
 
     function makeMove(id,move){
-        console.log(id + '   ' + move)
         images[id] = (move) ? krest : circle
         imagesId[id] = (move) ? 1 : 2
         pressed[id] = true
@@ -61,7 +60,7 @@ export const PlayField = (props) => {
     function setOutputGameData(move){
 
         outputGameData.bot = props.bot
-        outputGameData.winner = move===false ? false : true
+        outputGameData.winner = move
         if (move !== null) {
             outputGameData.leftState = move ? 'Win' : 'Lose'
             outputGameData.rightState = move ? 'Lose' : 'Win'
@@ -71,6 +70,7 @@ export const PlayField = (props) => {
             outputGameData.rightState = 'Drawn'
         }
         outputGameData.images = Object.assign([],images)
+        outputGameData.date = `${date.getDate()}.${date.getMonth()+1}.${date.getFullYear()} - ${date.getHours()}:${date.getMinutes()}`
     }
 
     function restartGame() {

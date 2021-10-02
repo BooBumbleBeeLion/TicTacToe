@@ -1,26 +1,19 @@
-import React from "react";
+import React, {useState} from "react";
 import { StyleSheet, View, Image, TouchableOpacity,Text, FlatList } from "react-native";
 import {BackBtnTop} from "../Widgets/BackBtnTop";
 import { HistoryPlayItem } from "../Widgets/HistoryPlayItem";
+import {GameData} from "../../GameData";
 
-let gameData = []
-
-for (let i = 0; i < 20; i++){
-    gameData.push({
-        id: i.toString(),
-        gameEnd: "WIN",
-        date: Date.now(),
-        gameType: "SINGLE PLAYER",
-        color: "#5C821A",
-    })
-}
 export const TableScreen = (props) => {
-    console.log(gameData[0])
+
+    let [gameData,setGameData] = useState([])
+    gameData = GameData.result
     return (
         <View style={ styles.container }>
-            <BackBtnTop style={ styles.backBtnTop}changeScreen={props.changeScreen} />
+            <BackBtnTop changeScreen={props.changeScreen} />
             <FlatList
                 style={styles.flatList}
+
                 data={gameData}
                 renderItem={HistoryPlayItem}
                 showsVerticalScrollIndicator={false}
@@ -36,8 +29,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-around',
         padding: 20
-    },
-    backBtnTop: {
     },
     flatList: {
         top: '3%',
