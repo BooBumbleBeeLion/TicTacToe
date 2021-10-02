@@ -1,76 +1,76 @@
 import React, { useState } from 'react';
 import {StyleSheet, View, Alert, AsyncStorage} from 'react-native';
-import { PlayRow } from './PlayRow'
+import { PlayRow } from './PlayRow';
+import { GameData } from '../GameData';
 
 import krest from "../../res/krest.png";
 import circle from "../../res/circle.png";
 
 export const PlayField = (props) => {
-
-    let result = []
+    let lastGame = {}
+    let outputGameData = {
+        bot: false,
+        winner: true,
+        leftState: '',
+        rightState: '',
+        images: [],
+    }
     let [images,setImages] = useState([])
     let [imagesId,setImagesId] = useState([0,-1,-2,-3,-4,-5,-6,-7,-8])
     let [pressed,setPressed] = useState([])
     let [countPressed,setCountPressed] = useState(0)
 
     if(!props.goPlay){
-        loadLastGameData()
+        lastGame = GameData.getLastGame()
+        if(lastGame !== null) {
+            for (let i = 0; i < 9; i++) {
+                console.log(i + '][' + lastGame.images[i])
+                setStates(i, lastGame.images[i])
+            }
+        }
     }
 
-    return (
-        <View style={styles.gridView}>
-            <PlayRow rowId={0} changeImage={changeImage} images={images}/>
-            <PlayRow rowId={1} changeImage={changeImage} images={images}/>
-            <PlayRow rowId={2} changeImage={changeImage} images={images}/>
-        </View>
-    );
-    async function saveLastGameData(move, bot) {
-        try {
-            // ЗАпись состояния игрового поля
-            for (let i=0;i<9;i++) {
-                await AsyncStorage.setItem(
-                    `lastGameImages_${i}`,
-                    imagesId[i] === 1 ? 'krest' : imagesId[i] === 2 ? 'circle' : 'undefined'
-                )
-            }
-            // Запись победителя
-            await AsyncStorage.setItem(
-                `lastWinner`,
-                move ? 'krest' : 'circle'
-            )
-            // Запись того, играл против бота или человека
-            await AsyncStorage.setItem(
-                `lastWinnerPerson`,
-                props.bot ? 'bot' : 'human'
-            )
-        } catch (error) {
-            console.log(error)
-        }
-    }
-    async function loadLastGameData() {
-        try {
-            result = []
-            for (let i=0;i<9;i++) {
-                result.push(await AsyncStorage.getItem(`lastGameImages_${i}`));
-                await _setStates(i, result[i]);
-            }
-        } catch (error) {
-            console.log(error);
-        }
-    }
-    function _setStates(i, item) {
+    function setStates(i, item) {
         switch (item) {
-            case 'krest':
+            case 2:
+                console.log(i + '   ' + item)
                 makeMove(i, true)
                 break
-            case 'circle':
+            case 3:
+                console.log(i + '   ' + item)
                 makeMove(i, false)
                 break
-            case 'undefined':
+            case undefined:
                 images[i] = undefined
                 imagesId[i] = -i
                 break
         }
+    }
+
+    function makeMove(id,move){
+        console.log(id + '   ' + move)
+        images[id] = (move) ? krest : circle
+        imagesId[id] = (move) ? 1 : 2
+        pressed[id] = true
+        if (!props.goPlay)
+            countPressed++
+        else
+            setCountPressed(++countPressed)
+    }
+
+    function setOutputGameData(move){
+
+        outputGameData.bot = props.bot
+        outputGameData.winner = move===false ? false : true
+        if (move !== null) {
+            outputGameData.leftState = move ? 'Win' : 'Lose'
+            outputGameData.rightState = move ? 'Lose' : 'Win'
+        }
+        else {
+            outputGameData.leftState = 'Drawn'
+            outputGameData.rightState = 'Drawn'
+        }
+        outputGameData.images = Object.assign([],images)
     }
 
     function restartGame() {
@@ -101,13 +101,6 @@ export const PlayField = (props) => {
         }
     }
 
-    function makeMove(id,move){
-        images[id] = (move) ? krest : circle
-        imagesId[id] = (move) ? 1 : 2
-        setCountPressed(++countPressed)
-        pressed[id] = true
-    }
-
     function winGame(move) {
         // Проверка всех вариантов победы (8 вариантов: 3 по горизонтали, 3 по вертикали, 2 по диагонали)
         if ((imagesId[0] === imagesId[1] && imagesId[0] === imagesId[2]) ||
@@ -128,7 +121,8 @@ export const PlayField = (props) => {
             )
             move ? props.setLeftScore(props.leftScore + 1)
                  : props.setRightScore(props.rightScore + 1)
-            saveLastGameData(move)
+            setOutputGameData(move)
+            GameData.saveGameData(outputGameData)
             return true
         } else if (countPressed === 9) {
             Alert.alert(
@@ -138,11 +132,20 @@ export const PlayField = (props) => {
                     {text: "Заново", onPress: () => restartGame()}
                 ]
             )
-            saveLastGameData()
+            setOutputGameData(null)
+            GameData.saveGameData(outputGameData)
             return true
         }
         return false
     }
+
+    return (
+        <View style={styles.gridView}>
+            <PlayRow rowId={0} changeImage={changeImage} images={images}/>
+            <PlayRow rowId={1} changeImage={changeImage} images={images}/>
+            <PlayRow rowId={2} changeImage={changeImage} images={images}/>
+        </View>
+    );
 }
 const styles = StyleSheet.create({
     gridView: {

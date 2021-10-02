@@ -4,8 +4,11 @@ import { MainButton } from './MainButton';
 
 // Images
 import icon from '../../../assets/icon.png';
+import {GameData} from "../../GameData";
 
 export const MainScreen = (props) => {
+    // GameData.clearGameData()
+    GameData.loadGameData()
     return (
         <View style={ styles.navBar }>
             <Image style={ styles.navImage } source={icon}/>

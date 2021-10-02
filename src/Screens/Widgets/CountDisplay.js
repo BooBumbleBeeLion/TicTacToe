@@ -16,7 +16,10 @@ export const CountDisplay = (props) => {
                 right: asStyle('right',props.player),
                 alignItems: asStyle('alignItems',props.player),
             }}>
-                <Text style={styles.text}>{props.text}</Text>
+                <Text style={{
+                    ...styles.text,
+                    left : (props.player==='left' && props.text==='Drawn')? 10 : 0
+                }}>{props.text}</Text>
             </View>
         </View>
     )
@@ -65,6 +68,6 @@ const styles = StyleSheet.create({
     },
     text:{
         fontWeight: 'bold',
-        fontSize: 23
+        fontSize: 23,
     },
 })
