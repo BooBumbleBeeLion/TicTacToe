@@ -13,8 +13,8 @@ export const TableScreen = (props) => {
             <BackBtnTop changeScreen={props.changeScreen} />
             <FlatList
                 style={styles.flatList}
-
                 data={gameData}
+                inverted={true}
                 renderItem={HistoryPlayItem}
                 showsVerticalScrollIndicator={false}
             />

@@ -8,6 +8,10 @@ export class GameData {
     static id = 0
     static gameData = {}
 
+    static getGame(id){
+        return this.result[id];
+    }
+
     static getLastGame(){
         if(this.result.length) {
             return this.result[this.result.length - 1]

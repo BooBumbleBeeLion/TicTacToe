@@ -14,7 +14,7 @@ export const PlayField = (props) => {
         winner: true,
         leftState: '',
         rightState: '',
-        images: [],
+        imagesId: [],
         date: '',
     }
     let [images,setImages] = useState([])
@@ -27,20 +27,20 @@ export const PlayField = (props) => {
         lastGame = GameData.getLastGame()
         if(lastGame !== null) {
             for (let i = 0; i < 9; i++) {
-                setStates(i, lastGame.images[i])
+                setStates(i, lastGame.imagesId[i])
             }
         }
     }
 
     function setStates(i, item) {
         switch (item) {
-            case 2:
+            case 1:
                 makeMove(i, true)
                 break
-            case 3:
+            case 2:
                 makeMove(i, false)
                 break
-            case undefined:
+            default:
                 images[i] = undefined
                 imagesId[i] = -i
                 break
@@ -69,7 +69,7 @@ export const PlayField = (props) => {
             outputGameData.leftState = 'Drawn'
             outputGameData.rightState = 'Drawn'
         }
-        outputGameData.images = Object.assign([],images)
+        outputGameData.imagesId = Object.assign([],imagesId)
         outputGameData.date = `${date.getDate()}.${date.getMonth()+1}.${date.getFullYear()} - ${date.getHours()}:${date.getMinutes()}`
     }
 
