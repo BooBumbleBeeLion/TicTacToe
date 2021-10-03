@@ -38,7 +38,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-between',
         width: '100%',
-        // backgroundColor: '#000000'
     },
     btnChild: {
         height: 70,

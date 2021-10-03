@@ -1,8 +1,8 @@
-import React, {useState} from "react";
-import {Alert, StyleSheet, View} from "react-native";
-import {GameData} from "../../GameData";
+import React from "react";
+import { StyleSheet, View } from "react-native";
+import { GameData } from "../../GameData";
+import { PlayRow } from "../../PlayField/PlayRow";
 
-import {PlayRow} from "../../PlayField/PlayRow";
 import krest from "../../../assets/krest.png";
 import circle from "../../../assets/circle.png";
 
@@ -11,7 +11,7 @@ export const PreviewField = (props) => {
     let images = []
     Preview()
     function Preview() {
-        let lastGame = GameData.getGame(props.id)
+        let lastGame = GameData.getGames(props.id)
         if (lastGame !== null) {
             for (let i = 0; i < 9; i++) {
                 switch (lastGame.imagesId[i]) {
@@ -40,7 +40,6 @@ export const PreviewField = (props) => {
 
 const styles = StyleSheet.create({
     gridView: {
-        // backgroundColor: '#347298',
         alignItems: 'center',
         justifyContent: 'center',
     },

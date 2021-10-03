@@ -25,6 +25,5 @@ const styles = StyleSheet.create({
         flex: 1,
         textAlignVertical : 'center',
         textAlign: "center",
-        // backgroundColor: '#000000'
     },
 })

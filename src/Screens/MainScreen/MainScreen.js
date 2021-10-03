@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, View, Image, TouchableOpacity } from "react-native";
+import { StyleSheet, View, Image } from "react-native";
 import { MainButton } from './MainButton';
 
 // Images
@@ -30,7 +30,6 @@ const styles = StyleSheet.create({
     navImage: {
         height: 256,
         width: 256,
-        //backgroundColor: '#FFFFFF',
     },
     mainBtns:{
         marginTop: '10%',

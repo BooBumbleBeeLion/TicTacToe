@@ -1,9 +1,9 @@
 import React, {useState} from "react";
-import {AsyncStorage, StyleSheet, View} from "react-native";
+import { StyleSheet, View } from "react-native";
 import { PlayField } from '../../PlayField/PlayField'
 import { CountDisplay } from "../Widgets/CountDisplay";
 import { BackBtnTop } from "../Widgets/BackBtnTop";
-import {GameData} from "../../GameData";
+import { GameData } from "../../GameData";
 
 export const LastGameScreen = (props) => {
 
@@ -16,7 +16,7 @@ export const LastGameScreen = (props) => {
 
     function loadData() {
         lastGame = GameData.getLastGame();
-        console.log("Вернул: " + JSON.stringify(lastGame))
+
         if(lastGame !== null) {
             bot = lastGame.bot
             move = lastGame.winner
@@ -29,7 +29,6 @@ export const LastGameScreen = (props) => {
         <View style={styles.container}>
             <BackBtnTop changeScreen={props.changeScreen}/>
             <View style={styles.playersView}>
-                {/* Короче text-выводимый текст; player- с какой он стороны; move-чей щас ход; person-какую картинку ставить*/}
                 <CountDisplay text={leftState} player={'left'} move={move} bot={false}/>
                 <CountDisplay text={rightState} player={'right'} move={!move} bot={bot}/>
             </View>
@@ -52,7 +51,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-between',
         width: '100%',
-        // backgroundColor: '#000000'
     },
     btnChild: {
         height: 70,

@@ -1,36 +1,60 @@
-import React, {useState} from "react";
-import {AsyncStorage, StyleSheet, View} from "react-native";
-import { PreviewField } from './PreviewField'
-import { GameData } from "../../GameData";
+import React from "react";
+import { Image, StyleSheet, Text, View} from "react-native";
 
-export const PreviewPlayItem = (props) => {
+import krest from "../../../assets/krest.png";
+import circle from "../../../assets/circle.png";
+import nothing from "../../../assets/nothing.png";
+
+export const PreviewPlayItem = ({ item }) => {
 
     return (
-        <View style={styles.container}>
-            <PreviewField id={props.id} />
+        <View key={item.id} style={styles.mainItemBody}>
+            <View style={styles.endTypeGameBlock}>
+                <Image style={styles.image}
+                       source={item.winner ? krest : item.winner === false ? circle : nothing}/>
+            </View>
+            <View style={styles.textInfoBlock}>
+                <Text style={styles.text}>{item.bot ? 'Single Player' : 'Game for Two'}</Text>
+                <Text style={styles.text}>{item.date}</Text>
+            </View>
         </View>
     )
 }
 
 const styles = StyleSheet.create({
-    container: {
-        width: '100%',
-        height: this.width,
+    mainItemBody: {
+        height:100,
+        width: 400,
         alignItems: 'center',
+        flexDirection: 'row',
+        backgroundColor: '#c4c4c4',
+        borderRadius: 15,
+        marginTop: 15
+    },
+    endTypeGameBlock: {
+        height: '100%',
+        width: 80,
         justifyContent: 'center',
-        padding: 20
-    },
-    btnChild: {
-        height: 70,
-        width: 300,
-        marginTop: '10%',
         alignItems: 'center',
-        backgroundColor: '#D4DDE1',
-        borderRadius: 20,
+        paddingLeft: 20,
+        paddingRight: 20,
+        borderBottomLeftRadius: 10,
+        borderTopLeftRadius: 10,
+        backgroundColor: '#5C821A'
     },
-    btnText: {
-        fontSize: 20,
-        flex: 1,
-        textAlignVertical : 'center',
+    image:{
+        width: 70,
+        height: 70,
+        shadowOpacity: 0,
+        margin: 10,
+    },
+    textInfoBlock: {
+        width: '70%',
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    text: {
+        fontWeight: 'bold',
+        fontSize: 23,
     },
 })

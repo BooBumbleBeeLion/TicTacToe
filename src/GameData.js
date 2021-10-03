@@ -8,14 +8,13 @@ export class GameData {
     static id = 0
     static gameData = {}
 
-    static getGame(id){
+    static getGames(id){
         return this.result[id];
     }
 
     static getLastGame(){
-        if(this.result.length) {
+        if(this.result.length)
             return this.result[this.result.length - 1]
-        }
         else
             return null
     }
@@ -30,6 +29,7 @@ export class GameData {
             alert("Не удалось сохранить игру")
         }
     }
+
     static async loadGameData() {
         try {
             let id = 0
