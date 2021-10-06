@@ -2,7 +2,11 @@ import React from "react";
 import { StyleSheet, View, Image, TouchableOpacity,Text } from "react-native";
 
 import back from "../../../assets/back.png"
-
+/**
+ * Компонент отрисовки кнопки возвращения в главное меню
+ *
+ * @param props - содержит:
+ * changeScreen()-изменение id отображаемого экрана */
 export const BackBtnTop = (props) => {
     return (
         <View style={styles.mainView}>

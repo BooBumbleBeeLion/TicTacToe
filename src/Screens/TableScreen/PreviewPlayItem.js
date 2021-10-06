@@ -5,6 +5,11 @@ import krest from "../../../assets/krest.png";
 import circle from "../../../assets/circle.png";
 import nothing from "../../../assets/nothing.png";
 
+/**
+ * Компонент информации о сыгранной игре(x/o/ничья-режим-дата)
+ *
+ * @param {item} - содержит:
+ * gameData[]-массив литерал объектов информации о партиях */
 export const PreviewPlayItem = ({ item }) => {
 
     return (

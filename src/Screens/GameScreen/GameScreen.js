@@ -3,23 +3,28 @@ import { StyleSheet, View } from "react-native";
 import { PlayField } from '../../PlayField/PlayField'
 import { CountDisplay } from "../Widgets/CountDisplay";
 import { BackBtnTop } from "../Widgets/BackBtnTop";
-
+/**
+ * Компонент отображения игрового экрана
+ *
+ * @param props - содержит:
+ * bot-с ботом или без;
+ * leftScore-счет левого игрока;
+ * rightScore-счет правого игрока;
+ * changeScreen()-изменение id отображаемого экрана;
+ * changeScore()-изменение счета игрока */
 export const GameScreen = (props) => {
 
     const [move,setMove] = useState(true)
-    const [leftScore,setLeftScore] = useState(0)
-    const [rightScore,setRightScore] = useState(0)
 
     return (
         <View style={styles.container}>
             <BackBtnTop changeScreen={props.changeScreen}/>
             <View style={styles.playersView}>
-                {/* Короче text-выводимый текст; player- с какой он стороны; move-чей щас ход; person-какую картинку ставить*/}
-                <CountDisplay text={leftScore} player={'left'} move={move} bot={false}/>
-                <CountDisplay text={rightScore} player={'right'} move={!move} bot={props.bot}/>
+                <CountDisplay text={props.leftScore} player={'left'} move={move} bot={false}/>
+                <CountDisplay text={props.rightScore} player={'right'} move={!move} bot={props.bot}/>
             </View>
-            <PlayField move={move} leftScore={leftScore} rightScore={rightScore} bot={props.bot} goPlay={true}
-                       setMove={setMove} setLeftScore={setLeftScore} setRightScore={setRightScore}/>
+            <PlayField move={move} leftScore={props.leftScore} rightScore={props.rightScore} bot={props.bot}
+                       setMove={setMove} changeScore={props.changeScore}/>
         </View>
     )
 }

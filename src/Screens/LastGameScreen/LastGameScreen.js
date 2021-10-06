@@ -4,7 +4,12 @@ import { PlayField } from '../../PlayField/PlayField'
 import { CountDisplay } from "../Widgets/CountDisplay";
 import { BackBtnTop } from "../Widgets/BackBtnTop";
 import { GameData } from "../../GameData";
-
+import { PreviewField } from "../Widgets/PreviewField";
+/**
+ * Компонент отображения последней сыгранной игры
+ *
+ * @param props - содержит:
+ * changeScreen()-изменение id отображаемого экрана */
 export const LastGameScreen = (props) => {
 
     let lastGame = {}
@@ -13,7 +18,8 @@ export const LastGameScreen = (props) => {
     let [leftState, setLeftState] = useState('');
     let [rightState, setRightState] = useState('');
     loadData()
-
+    /**
+     * Загружает данные о последней игры, помещает их в стейты */
     function loadData() {
         lastGame = GameData.getLastGame();
 
@@ -32,7 +38,7 @@ export const LastGameScreen = (props) => {
                 <CountDisplay text={leftState} player={'left'} move={move} bot={false}/>
                 <CountDisplay text={rightState} player={'right'} move={!move} bot={bot}/>
             </View>
-            <PlayField goPlay={false} bot={false} />
+            <PreviewField style={styles.previewField} id={GameData.id-1} />
         </View>
     )
 }
@@ -51,18 +57,9 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-between',
         width: '100%',
+        // top: '5%'
     },
-    btnChild: {
-        height: 70,
-        width: 300,
-        marginTop: '10%',
-        alignItems: 'center',
-        backgroundColor: '#D4DDE1',
-        borderRadius: 20,
-    },
-    btnText: {
-        fontSize: 20,
-        flex: 1,
-        textAlignVertical : 'center',
-    },
+    previewField: {
+
+    }
 })

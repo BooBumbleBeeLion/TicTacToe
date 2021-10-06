@@ -1,6 +1,11 @@
 import React from 'react';
 import { StyleSheet, Image, TouchableOpacity } from 'react-native';
-
+/**
+ * Компонент отрисовки игрового поля, содержит игровую логику
+ * @param props - содержит:
+ * btnId-номер кнопки на поле на поле;
+ * images-состояние картинки данной кнопки;
+ * changeImage()-метод изменения экрана */
 export const PlayBtn = (props) => {
     return (
         <TouchableOpacity style={styles.ticButton} onPress={() => props.changeImage(props.btnId)}>

@@ -1,6 +1,12 @@
 import React from "react";
 import {StyleSheet, TouchableOpacity, Text} from "react-native";
-
+/**
+ * Компонент отрисовки кнопок навигации для начального экрана
+ *
+ * @param props - содержит:
+ * title-Подпись посередине кнопки;
+ * id-экрана, за которым закреплена эта кнопка;
+ * changeScreen(id)-изменение id отображаемого экрана*/
 export const MainButton = (props) => {
     return (
         <TouchableOpacity style={styles.btnChild} onPress={() => props.changeScreen(props.id)}>

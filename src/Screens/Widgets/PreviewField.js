@@ -6,13 +6,19 @@ import { PlayRow } from "../../PlayField/PlayRow";
 import krest from "../../../assets/krest.png";
 import circle from "../../../assets/circle.png";
 
-
+/**
+ * Компонент отрисовки игрового поля, содержит игровую логику
+ * @param props - содержит:
+ * id-загрузка конкретного матча по его id */
 export const PreviewField = (props) => {
     let images = []
     Preview()
+    /**
+     * Подгрузка и отображение конкретного матча
+     * @param {number} id- Номер матча */
     function Preview() {
-        let lastGame = GameData.getGames(props.id)
-        if (lastGame !== null) {
+        let lastGame = GameData.getGame(props.id)
+        if (lastGame !== null && lastGame !== undefined) {
             for (let i = 0; i < 9; i++) {
                 switch (lastGame.imagesId[i]) {
                     case 1:
@@ -40,6 +46,7 @@ export const PreviewField = (props) => {
 
 const styles = StyleSheet.create({
     gridView: {
+        flex: 1 ,
         alignItems: 'center',
         justifyContent: 'center',
     },

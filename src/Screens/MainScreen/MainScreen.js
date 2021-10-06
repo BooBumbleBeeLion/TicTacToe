@@ -1,14 +1,18 @@
 import React from "react";
 import { StyleSheet, View, Image } from "react-native";
 import { MainButton } from './MainButton';
+import {GameData} from "../../GameData";
 
 // Images
 import icon from '../../../assets/icon.png';
-import {GameData} from "../../GameData";
-
+/**
+ * Компонент отрисовки начального экрана с навигацией по другим экранам
+ *
+ * @param props - содержит: Метод для изменения отображаемого экрана */
 export const MainScreen = (props) => {
     // GameData.clearGameData()
     GameData.loadGameData()
+
     return (
         <View style={ styles.navBar }>
             <Image style={ styles.navImage } source={icon}/>

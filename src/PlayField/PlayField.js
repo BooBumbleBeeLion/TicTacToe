@@ -5,9 +5,15 @@ import { GameData } from '../GameData';
 
 import krest from "../../assets/krest.png";
 import circle from "../../assets/circle.png";
-
+/**
+ * Компонент отрисовки игрового поля, содержит игровую логику
+ * @param props - содержит:
+ * [move,setMove]-Состояние хода;
+ * leftScore-Состояние счета левого игрока;
+ * rightScore-Состояние счета правого игрока;
+ * bot-играем с ботом или нет;
+ * changeScore()-изменение счёта*/
 export const PlayField = (props) => {
-    let lastGame = {}
     let outputGameData = {
         id: 0,
         bot: false,
@@ -22,57 +28,34 @@ export const PlayField = (props) => {
     let [pressed,setPressed] = useState([])
     let [countPressed,setCountPressed] = useState(0)
     let date = new Date()
-
-    if(!props.goPlay){
-        lastGame = GameData.getLastGame()
-        if(lastGame !== null) {
-            for (let i = 0; i < 9; i++) {
-                setStates(i, lastGame.imagesId[i])
-            }
-        }
-    }
-
-    function setStates(i, item) {
-        switch (item) {
-            case 1:
-                makeMove(i, true)
-                break
-            case 2:
-                makeMove(i, false)
-                break
-            default:
-                images[i] = undefined
-                imagesId[i] = -i
-                break
-        }
-    }
-
+    /**
+     * Метод совершения хода на кнопке
+     * @param {number} id-Кнопка на которой совершаем ход;
+     * @param {bool} move-Чей ход */
     function makeMove(id,move){
         images[id] = (move) ? krest : circle
         imagesId[id] = (move) ? 1 : 2
         pressed[id] = true
-        if (!props.goPlay)
-            countPressed++
-        else
-            setCountPressed(++countPressed)
+        setCountPressed(++countPressed)
     }
-
+    /**
+     * Метод подготовки литерала outputGameData для сохранение в историю игр
+     * @param {bool} move-чей последний ход */
     function setOutputGameData(move){
-
         outputGameData.bot = props.bot
         outputGameData.winner = move
         if (move !== null) {
             outputGameData.leftState = move ? 'Win' : 'Lose'
             outputGameData.rightState = move ? 'Lose' : 'Win'
-        }
-        else {
+        } else {
             outputGameData.leftState = 'Drawn'
             outputGameData.rightState = 'Drawn'
         }
         outputGameData.imagesId = Object.assign([],imagesId)
         outputGameData.date = `${date.getDate()}.${date.getMonth()+1}.${date.getFullYear()} - ${date.getHours()}:${date.getMinutes()}`
     }
-
+    /**
+     * Метод сброса State до начальных значений */
     function restartGame() {
         props.setMove(true)
         setImages([])
@@ -80,27 +63,29 @@ export const PlayField = (props) => {
         setPressed([])
         setCountPressed(0)
     }
-
+    /**
+     * Метод смены картинки нажатой кнопки на поле
+     * @param {number} id-номер нажатой кнопки */
     function changeImage(id) {
-        if (props.goPlay){
-            // Если ранее не нажата
-            if (!pressed[id]) {
-                makeMove(id, props.move)
-                if (!winGame(props.move) && props.bot && countPressed !== 9) {
-                    // Если бот, то выполняется ход следующий сразу без смены состояния очереди хода
-                    let rndId = Math.floor(Math.random() * 9);
-                    while (pressed[rndId]) {
-                        rndId = Math.floor(Math.random() * 9);
-                    }
-                    makeMove(rndId, !props.move)
-                    winGame(!props.move)
-                } else { // Если не бот просто меняется состояние очереди хода
-                    props.setMove(!props.move)
-                }
+        // Если ранее не нажата
+        if (!pressed[id]) {
+            makeMove(id, props.move)
+            // Если играем против бота
+            if (!winGame(props.move) && props.bot && countPressed !== 9) {
+                // Если бот, то выполняется ход следующий сразу без смены состояния очереди хода
+                let rndId = Math.floor(Math.random() * 9);
+                while (pressed[rndId])
+                    rndId = Math.floor(Math.random() * 9);
+                makeMove(rndId, !props.move)
+                winGame(!props.move)
             }
+            else props.setMove(!props.move)
         }
     }
-
+    /**
+     * Метод проверки выигрыша с текущим состоянием поля
+     * @param {bool} move-текущий ход
+     * @return {bool} Состояние выигрыша */
     function winGame(move) {
         // Проверка всех вариантов победы (8 вариантов: 3 по горизонтали, 3 по вертикали, 2 по диагонали)
         if ((imagesId[0] === imagesId[1] && imagesId[0] === imagesId[2]) ||
@@ -119,8 +104,8 @@ export const PlayField = (props) => {
                     {text: "Заново", onPress: () => restartGame()}
                 ]
             )
-            move ? props.setLeftScore(props.leftScore + 1)
-                 : props.setRightScore(props.rightScore + 1)
+            move ? (props.bot ? props.changeScore('botLeftScore') : props.changeScore('playersLeftScore'))
+                 : (props.bot ? props.changeScore('botRightScore') : props.changeScore('playersRightScore'))
             setOutputGameData(move)
             GameData.saveGameData(outputGameData)
             return true
@@ -147,6 +132,7 @@ export const PlayField = (props) => {
         </View>
     );
 }
+
 const styles = StyleSheet.create({
     gridView: {
         flex: 1,

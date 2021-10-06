@@ -3,7 +3,14 @@ import {StyleSheet, View, Text, Image} from "react-native";
 
 import athlete from "../../../assets/athlete.png"
 import bot from "../../../assets/chatbot.png"
-
+/**
+ * Компонент отображения игрового состояния
+ *
+ * @param props - содержит:
+ * text- отображаемый текст;
+ * player-слева или справа расположен игрок;
+ * move-чей текущий ход;
+ * bot-играем с ботом или человеком */
 export const CountDisplay = (props) => {
     return (
         <View>
@@ -24,16 +31,24 @@ export const CountDisplay = (props) => {
         </View>
     )
 }
-// Метод для задания размеров картинки взависимости от того чей ход
+/**
+ * Метод для задания размеров картинки, взависимости от того, чей ход
+ * @param {string} style - название стиля
+ * @param {boolean} move - чей текущий ход
+ * @description Если текущий ход данного компонента, то он становится больше
+ * */
 const asMove = (style,move) => {
     if(move === null)
         return (style === 'width') ? 100 : 120
-    if (move)
+    else if (move)
         return (style === 'width') ? 100 : 120
     else
         return (style === 'width') ? 82 : 100
 }
-// Метод для задания позиционирования кружочка и картинки с отступами нужными
+/**
+ * Метод для задания позиционирования кружочка и картинки с нужными отступами
+ * @param {string} style - Какой стиль задаём
+ * @param {string} player - Левый или правый игрок*/
 const asStyle = (style, player) => {
     switch (style){
         case 'alignItems':
@@ -43,6 +58,7 @@ const asStyle = (style, player) => {
                 case 'right':
                     return 'flex-start'
             }
+            break
         case 'right':
             switch (player){
                 case 'left':
@@ -50,6 +66,7 @@ const asStyle = (style, player) => {
                 case 'right':
                     return 40
             }
+            break
     }
 }
 

@@ -3,7 +3,11 @@ import { StyleSheet, View, FlatList } from "react-native";
 import { BackBtnTop } from "../Widgets/BackBtnTop";
 import { HistoryPlayItem } from "../Widgets/HistoryPlayItem";
 import { GameData } from "../../GameData";
-
+/**
+ * Компонент отображения истории игр
+ *
+ * @param props - содержит:
+ * changeScreen()-изменение id отображаемого экрана */
 export const TableScreen = (props) => {
 
     let [gameData,setGameData] = useState(GameData.result)

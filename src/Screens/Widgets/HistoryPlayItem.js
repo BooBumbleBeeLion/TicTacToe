@@ -1,8 +1,12 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
-import { PreviewField } from "../TableScreen/PreviewField";
+import { PreviewField } from "./PreviewField";
 import { PreviewPlayItem } from "../TableScreen/PreviewPlayItem";
-
+/**
+ * Компонент карточки информации о сыгранной партии
+ *
+ * @param {item} - содержит:
+ * gameData[]-массив литерал объектов информации о партиях */
 export const HistoryPlayItem = ({ item }) => {
 
     return (
