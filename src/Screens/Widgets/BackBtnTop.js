@@ -2,16 +2,24 @@ import React from "react";
 import { StyleSheet, View, Image, TouchableOpacity,Text } from "react-native";
 
 import back from "../../../assets/back.png"
+import {setScreenAction} from "../../store/reducers/ScreenReducer";
+import {useDispatch} from "react-redux";
 /**
  * Компонент отрисовки кнопки возвращения в главное меню
  *
  * @param props - содержит:
  * changeScreen()-изменение id отображаемого экрана */
 export const BackBtnTop = (props) => {
+
+    const dispatch  = useDispatch();
+    const setScreen = (id) => {
+        dispatch(setScreenAction(id))
+    }
+
     return (
         <View style={styles.mainView}>
             <TouchableOpacity style={styles.btnBack}
-                              onPress={() => props.changeScreen(0)}>
+                              onPress={() => setScreen(0)}>
                 <Image style={styles.image} source={back}/>
                 <Text style={styles.text}>Назад</Text>
             </TouchableOpacity>

@@ -2,7 +2,8 @@ import React from "react";
 import {StyleSheet, View, Text, Image} from "react-native";
 
 import athlete from "../../../assets/athlete.png"
-import bot from "../../../assets/chatbot.png"
+import chatbot from "../../../assets/chatbot.png"
+import {useSelector} from "react-redux";
 /**
  * Компонент отображения игрового состояния
  *
@@ -11,22 +12,23 @@ import bot from "../../../assets/chatbot.png"
  * player-слева или справа расположен игрок;
  * move-чей текущий ход;
  * bot-играем с ботом или человеком */
-export const CountDisplay = (props) => {
+export const CountDisplay = ({text, player, move, bot}) => {
+
     return (
         <View>
             <Image style={{
-                width: asMove('width', props.move),
-                height: asMove('height', props.move),
-            }} source={ (props.bot) ? bot : athlete }/>
+                width: asMove('width', move),
+                height: asMove('height', move),
+            }} source={ (bot) ? chatbot : athlete }/>
             <View style={{
                 ...styles.countDisplay,
-                right: asStyle('right',props.player),
-                alignItems: asStyle('alignItems',props.player),
+                right: asStyle('right',player),
+                alignItems: asStyle('alignItems',player),
             }}>
                 <Text style={{
                     ...styles.text,
-                    left : (props.player==='left' && props.text==='Drawn')? 10 : 0
-                }}>{props.text}</Text>
+                    left : (player==='left' && text==='Drawn')? 10 : 0
+                }}>{text}</Text>
             </View>
         </View>
     )

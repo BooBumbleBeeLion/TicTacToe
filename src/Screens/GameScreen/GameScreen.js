@@ -3,6 +3,7 @@ import { StyleSheet, View } from "react-native";
 import { PlayField } from '../../PlayField/PlayField'
 import { CountDisplay } from "../Widgets/CountDisplay";
 import { BackBtnTop } from "../Widgets/BackBtnTop";
+import { useSelector } from "react-redux";
 /**
  * Компонент отображения игрового экрана
  *
@@ -14,17 +15,38 @@ import { BackBtnTop } from "../Widgets/BackBtnTop";
  * changeScore()-изменение счета игрока */
 export const GameScreen = (props) => {
 
-    const [move,setMove] = useState(true)
+    const bot = useSelector(state => state.ScreenReducer.bot)
+    const move = useSelector(state =>
+        (bot  ? state.GameReducer.singleMove
+            : state.GameReducer.playersMove))
+    const leftScore = useSelector(state =>
+        (bot  ? state.ScoreReducer.playerScore
+            : state.ScoreReducer.firstPlayerScore))
+    const rightScore = useSelector(state =>
+        (bot  ? state.ScoreReducer.botScore
+            : state.ScoreReducer.secondPlayerScore))
+    // let move
+    // let leftScore
+    // let rightScore
+    //
+    // if(bot){
+    //     move = useSelector(state =>state.GameReducer.singleMove)
+    //     leftScore = useSelector(state => state.ScoreReducer.playerScore)
+    //     rightScore = useSelector(state => state.ScoreReducer.botScore)
+    // }else{
+    //     move = useSelector(state =>state.GameReducer.playersMove)
+    //     leftScore = useSelector(state => state.ScoreReducer.firstPlayerScore)
+    //     rightScore = useSelector(state => state.ScoreReducer.secondPlayerScore)
+    // }
 
     return (
         <View style={styles.container}>
-            <BackBtnTop changeScreen={props.changeScreen}/>
+            <BackBtnTop/>
             <View style={styles.playersView}>
-                <CountDisplay text={props.leftScore} player={'left'} move={move} bot={false}/>
-                <CountDisplay text={props.rightScore} player={'right'} move={!move} bot={props.bot}/>
+                <CountDisplay text={leftScore} player={'left'} move={move} bot={false} />
+                <CountDisplay text={rightScore} player={'right'} move={!move} bot={bot} />
             </View>
-            <PlayField move={move} leftScore={props.leftScore} rightScore={props.rightScore} bot={props.bot}
-                       setMove={setMove} changeScore={props.changeScore}/>
+            <PlayField goPlay={true}/>
         </View>
     )
 }

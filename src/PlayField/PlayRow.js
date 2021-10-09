@@ -10,9 +10,9 @@ import { PlayBtn } from './PlayBtn'
 export const PlayRow = (props) => {
     return (
         <View style={styles.rowView}>
-            <PlayBtn btnId={0+(props.rowId * 3)} images={props.images} changeImage={props.changeImage}/>
-            <PlayBtn btnId={1+(props.rowId * 3)} images={props.images} changeImage={props.changeImage}/>
-            <PlayBtn btnId={2+(props.rowId * 3)} images={props.images} changeImage={props.changeImage}/>
+            <PlayBtn btnId={0+(props.rowId * 3)} />
+            <PlayBtn btnId={1+(props.rowId * 3)} />
+            <PlayBtn btnId={2+(props.rowId * 3)} />
         </View>
     );
 }

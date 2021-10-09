@@ -38,7 +38,7 @@ export const LastGameScreen = (props) => {
                 <CountDisplay text={leftState} player={'left'} move={move} bot={false}/>
                 <CountDisplay text={rightState} player={'right'} move={!move} bot={bot}/>
             </View>
-            <PreviewField style={styles.previewField} id={GameData.id-1} />
+            <PreviewField last={true} />
         </View>
     )
 }

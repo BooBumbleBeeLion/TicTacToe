@@ -35,6 +35,7 @@ export class GameData {
             this.gameData = gData
             this.gameData.id = this.id
             await AsyncStorage.setItem(`SaveGameState_${this.id++}`,JSON.stringify(this.gameData))
+            console.log(JSON.stringify(this.gameData))
 
         } catch (error) {
             alert("Не удалось сохранить игру")
