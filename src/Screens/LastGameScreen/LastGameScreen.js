@@ -1,17 +1,18 @@
 import React, {useState} from "react";
-import { StyleSheet, View } from "react-native";
-import { PlayField } from '../../PlayField/PlayField'
+import { StyleSheet, View, BackHandler } from "react-native";
 import { CountDisplay } from "../Widgets/CountDisplay";
 import { BackBtnTop } from "../Widgets/BackBtnTop";
 import { GameData } from "../../GameData";
 import { PreviewField } from "../Widgets/PreviewField";
+import {useDispatch} from "react-redux";
+import {setScreenAction} from "../../store/reducers/ScreenReducer";
 /**
  * Компонент отображения последней сыгранной игры
  *
  * @param props - содержит:
  * changeScreen()-изменение id отображаемого экрана */
 export const LastGameScreen = (props) => {
-
+    const dispatch = useDispatch();
     let lastGame = {}
     let [bot, setBot] = useState(true)
     let [move, setMove] = useState(true)
@@ -30,6 +31,10 @@ export const LastGameScreen = (props) => {
             rightState = lastGame.rightState
         }else alert("Вы еще не сыграли ни одной игры!")
     }
+    BackHandler.addEventListener("hardwareBackPress", () => {
+        dispatch(setScreenAction(0))
+        return true
+    })
 
     return (
         <View style={styles.container}>

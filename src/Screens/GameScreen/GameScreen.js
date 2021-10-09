@@ -1,9 +1,12 @@
 import React, {useState} from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, BackHandler } from "react-native";
 import { PlayField } from '../../PlayField/PlayField'
 import { CountDisplay } from "../Widgets/CountDisplay";
 import { BackBtnTop } from "../Widgets/BackBtnTop";
-import { useSelector } from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
+import {setScreenAction} from "../../store/reducers/ScreenReducer";
+import {GameData} from "../../GameData";
+import {setGameAction} from "../../store/reducers/GameReducer";
 /**
  * Компонент отображения игрового экрана
  *
@@ -14,7 +17,7 @@ import { useSelector } from "react-redux";
  * changeScreen()-изменение id отображаемого экрана;
  * changeScore()-изменение счета игрока */
 export const GameScreen = (props) => {
-
+    const dispatch = useDispatch();
     const bot = useSelector(state => state.ScreenReducer.bot)
     const move = useSelector(state =>
         (bot  ? state.GameReducer.singleMove
@@ -25,20 +28,11 @@ export const GameScreen = (props) => {
     const rightScore = useSelector(state =>
         (bot  ? state.ScoreReducer.botScore
             : state.ScoreReducer.secondPlayerScore))
-    // let move
-    // let leftScore
-    // let rightScore
-    //
-    // if(bot){
-    //     move = useSelector(state =>state.GameReducer.singleMove)
-    //     leftScore = useSelector(state => state.ScoreReducer.playerScore)
-    //     rightScore = useSelector(state => state.ScoreReducer.botScore)
-    // }else{
-    //     move = useSelector(state =>state.GameReducer.playersMove)
-    //     leftScore = useSelector(state => state.ScoreReducer.firstPlayerScore)
-    //     rightScore = useSelector(state => state.ScoreReducer.secondPlayerScore)
-    // }
 
+    BackHandler.addEventListener("hardwareBackPress", () => {
+        dispatch(setScreenAction(0))
+        return true
+    })
     return (
         <View style={styles.container}>
             <BackBtnTop/>

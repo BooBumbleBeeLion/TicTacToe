@@ -6,9 +6,10 @@ import { TableScreen } from './src/Screens/TableScreen/TableScreen';
 import { LastGameScreen } from "./src/Screens/LastGameScreen/LastGameScreen";
 import {useDispatch, useSelector} from "react-redux";
 import {setBotAction} from "./src/store/reducers/ScreenReducer";
+import {GameData} from "./src/GameData";
 
+GameData.loadGoFinishGame()
 export function App() {
-
     const dispatch  = useDispatch();
     const screenId = useSelector(state => state.ScreenReducer.screenId)
 

@@ -9,7 +9,7 @@ import {
     plusPlayerScoreAction,
     plusSecondPlayerScoreAction
 } from "../store/reducers/ScoreReducer";
-import {changeImageAction, restartGameAction} from "../store/reducers/GameReducer";
+import {changeImageAction, restartGameAction, setGameAction} from "../store/reducers/GameReducer";
 /**
  * Компонент отрисовки игрового поля, содержит игровую логику
  * @param props - содержит:
@@ -36,15 +36,19 @@ let outputGameData = {
     date: '',
 }
 export const PlayField = (props) => {
-    dispatch  = useDispatch()
+    dispatch = useDispatch()
+
     bot = useSelector(state => state.ScreenReducer.bot)
-    if(bot){
+
+    if (bot) {
+        console.log('INIT BOT')
         move = useSelector(state => state.GameReducer.singleMove)
         images = useSelector(state => state.GameReducer.singleImages)
         imagesId = useSelector(state => state.GameReducer.singleImagesId)
         pressed = useSelector(state => state.GameReducer.singlePressed)
         countPressed = useSelector(state => state.GameReducer.singleCountPressed)
-    }else{
+    } else {
+        console.log('INIT PLAYERS')
         move = useSelector(state => state.GameReducer.playersMove)
         images = useSelector(state => state.GameReducer.playersImages)
         imagesId = useSelector(state => state.GameReducer.playersImagesId)
@@ -52,11 +56,18 @@ export const PlayField = (props) => {
         countPressed = useSelector(state => state.GameReducer.playersCountPressed)
     }
 
+    const botGame = GameData.getGoFinishGame(true)
+    const playersGame = GameData.getGoFinishGame(false)
+    console.log(botGame + "     " + playersGame)
+
+    botGame !== 'null'  ? dispatch(setGameAction(botGame,true)) : null
+    playersGame !== 'null' ? dispatch(setGameAction(playersGame,false)) : null
+
     return (
         <View style={styles.gridView}>
-            <PlayRow rowId={0} />
-            <PlayRow rowId={1} />
-            <PlayRow rowId={2} />
+            <PlayRow rowId={0}/>
+            <PlayRow rowId={1}/>
+            <PlayRow rowId={2}/>
         </View>
     );
 }
@@ -86,6 +97,11 @@ export function botMove(){
         move = !move
         winGame()
     }
+    console.log(move + '   ' +
+    images + '   ' +
+    imagesId + '   ' +
+    pressed + '   ' +
+    countPressed )
 }
 function winGame() {
     // console.log('ПРОВЕРКА + ' + countPressed)
@@ -109,6 +125,7 @@ function winGame() {
         move   ? (bot ? dispatch(plusPlayerScoreAction()) : dispatch(plusFirstPlayerScoreAction()))
                 : (bot ? dispatch(plusBotScoreAction()) : dispatch(plusSecondPlayerScoreAction()))
         setOutputGameData(move)
+        GameData.saveGoFinishGame('null', bot)
         GameData.saveGameData(outputGameData)
         return true
     } else if (countPressed === 8) {
@@ -120,8 +137,19 @@ function winGame() {
             ]
         )
         setOutputGameData(null)
+        GameData.saveGoFinishGame('null', bot)
         GameData.saveGameData(outputGameData)
         return true
+    }
+    else{
+        GameData.saveGoFinishGame({
+            bot: bot,
+            move: !move,
+            images: images,
+            imagesId: imagesId,
+            pressed: pressed,
+            countPressed: countPressed+1,
+        }, bot)
     }
     return false
 }

@@ -1,17 +1,33 @@
 import React from "react";
-import { StyleSheet, View, Image } from "react-native";
+import {StyleSheet, View, Image, BackHandler, Alert} from "react-native";
 import { MainButton } from './MainButton';
 import { GameData } from "../../GameData";
 
 // Images
 import icon from '../../../assets/icon.png';
+import {setScreenAction} from "../../store/reducers/ScreenReducer";
+import {useDispatch} from "react-redux";
+import {restartGameAction, setGameAction} from "../../store/reducers/GameReducer";
 /**
  * Компонент отрисовки начального экрана с навигацией по другим экранам
  *
  * @param props - содержит: Метод для изменения отображаемого экрана */
 export const MainScreen = (props) => {
+    const dispatch = useDispatch();
     // GameData.clearGameData()
     GameData.loadGameData()
+
+    BackHandler.addEventListener("hardwareBackPress", () => {
+        Alert.alert(
+            "Вы куда?",
+            "Поиграйте ещё",
+            [
+                {text: "Остаться", onPress: () => {}},
+                {text: "Выйти", onPress: () => BackHandler.exitApp()}
+            ]
+        )
+        return true
+    })
 
     return (
         <View style={ styles.navBar }>

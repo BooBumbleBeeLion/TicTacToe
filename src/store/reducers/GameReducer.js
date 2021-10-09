@@ -17,12 +17,13 @@ const defaultState = {
     singleCountPressed: 0,
     playersCountPressed: 0,
 
-    finishSingle: true,
-    finishPlayers: true,
+    singleGoPlay: false,
+    playersGoPlay: false,
 }
 
 const changeImage = 'changeImage'
 const restartGame = 'restartGame'
+const setGame = 'setGame'
 
 export const GameReducer = (state = defaultState, action) => {
     switch (action.type) {
@@ -39,7 +40,6 @@ export const GameReducer = (state = defaultState, action) => {
                 else
                     return {...state}
             }
-
         case restartGame:
             if(action.bot) {
                 return {
@@ -49,7 +49,6 @@ export const GameReducer = (state = defaultState, action) => {
                     singleImagesId: [0, -1, -2, -3, -4, -5, -6, -7, -8],
                     singlePressed: [],
                     singleCountPressed: 0,
-                    finishSingle: true,
                 }
             } else {
                 return {
@@ -59,7 +58,39 @@ export const GameReducer = (state = defaultState, action) => {
                     playersImagesId: [0, -1, -2, -3, -4, -5, -6, -7, -8],
                     playersPressed: [],
                     playersCountPressed: 0,
-                    finishPlayers: true,
+                }
+            }
+        case setGame:
+            if(action.bot) {
+                state.singleMove = action.states.move
+                state.singleImages = action.states.images
+                state.singleImagesId = action.states.imagesId
+                state.singlePressed = action.states.pressed
+                state.singleCountPressed = action.states.countPressed
+
+                return {
+                    ...state,
+                    singleMove: action.states.move,
+                    singleImages: action.states.images,
+                    singleImagesId: action.states.imagesId,
+                    singlePressed: action.states.pressed,
+                    singleCountPressed: action.states.countPressed,
+                    singleGoPlay: true
+                }
+            }
+            else{
+                state.playersMove = action.states.move
+                state.playersImages = action.states.images
+                state.playersImagesId = action.states.imagesId
+                state.playersPressed = action.states.pressed
+                state.playersCountPressed = action.states.countPressed
+                return{...state,
+                    playersMove: action.states.move,
+                    playersImages: action.states.images,
+                    playersImagesId: action.states.imagesId,
+                    playersPressed: action.states.pressed,
+                    playersCountPressed: action.states.countPressed,
+                    playersGoPlay: true
                 }
             }
         default:
@@ -70,23 +101,19 @@ export const GameReducer = (state = defaultState, action) => {
         state.singleImages[id] = (state.singleMove) ? krest : circle
         state.singleImagesId[id] = (state.singleMove) ? 1 : 2
         state.singlePressed[id] = true
+        state.singleMove = !state.singleMove
+        state.singleCountPressed = state.singleCountPressed+1
 
-        return {...state,
-            singleMove: !state.singleMove,
-            finishSingle: false,
-            singleCountPressed: ++state.singleCountPressed,
-        }
+        return {...state,}
     }
     function playersMakeMove(id){
         state.playersImages[id] = (state.playersMove) ? krest : circle
         state.playersImagesId[id] = (state.playersMove) ? 1 : 2
         state.playersPressed[id] = true
+        state.playersMove = !state.playersMove
+        state.playersCountPressed = state.playersCountPressed+1
 
-        return {...state,
-            playersMove: !state.playersMove,
-            finishPlayers: false,
-            playersCountPressed: ++state.playersCountPressed,
-        }
+        return {...state,}
     }
 
 }
@@ -94,3 +121,4 @@ export const GameReducer = (state = defaultState, action) => {
 
 export const changeImageAction = (btnId, bot) => ({ type:changeImage, btnId:btnId, bot:bot })
 export const restartGameAction = (bot) => ({ type:restartGame, bot: bot })
+export const setGameAction = (states, bot) => ({type:setGame, states:states, bot: bot})
