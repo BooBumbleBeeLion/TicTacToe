@@ -5,13 +5,15 @@ import { GameScreen } from './src/Screens/GameScreen/GameScreen';
 import { TableScreen } from './src/Screens/TableScreen/TableScreen';
 import { LastGameScreen } from "./src/Screens/LastGameScreen/LastGameScreen";
 import {useDispatch, useSelector} from "react-redux";
-import {setBotAction} from "./src/store/reducers/ScreenReducer";
 import {GameData} from "./src/GameData";
+import {setBot} from "./src/store/reducers/ScreenSlice";
 
-GameData.loadGoFinishGame()
+// GameData.loadGoFinishGame()
 export function App() {
     const dispatch  = useDispatch();
-    const screenId = useSelector(state => state.ScreenReducer.screenId)
+    const screenId = useSelector(state => state.ScreenSlice.screenId)
+    const bot = useSelector(state => state.ScreenSlice.bot)
+    console.log(bot.toString() + "   " + screenId)
 
     return (
         <View style={styles.background}>
@@ -27,10 +29,10 @@ export function App() {
             case 1:
                 return (<LastGameScreen/>)
             case 2:
-                dispatch(setBotAction(true))
+                dispatch(setBot(true))
                 return (<GameScreen/>)
             case 3:
-                dispatch(setBotAction(false))
+                dispatch(setBot(false))
                 return (<GameScreen/>)
             case 4:
                 return (<TableScreen/>)

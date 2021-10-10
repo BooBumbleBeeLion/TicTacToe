@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { registerRootComponent } from 'expo';
 import { Provider } from 'react-redux';
 import { App } from './App';
-import { store } from './src/store'
+import { store } from './src/store/toolkitIndex'
 import {GameData} from "./src/GameData";
 
 class index extends Component {
