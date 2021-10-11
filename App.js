@@ -5,10 +5,10 @@ import { GameScreen } from './src/Screens/GameScreen/GameScreen';
 import { TableScreen } from './src/Screens/TableScreen/TableScreen';
 import { LastGameScreen } from "./src/Screens/LastGameScreen/LastGameScreen";
 import {useDispatch, useSelector} from "react-redux";
-import {GameData} from "./src/GameData";
 import {setBot} from "./src/store/reducers/GameSlice";
+import {GameData} from "./src/GameData";
 
-// GameData.loadGoFinishGame()
+GameData.loadGoFinishGame()
 export function App() {
     const dispatch  = useDispatch();
     const screenId = useSelector(state => state.ScreenSlice.screenId)

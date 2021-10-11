@@ -50,6 +50,7 @@ export class GameData {
      * Асинхронный метод для загрузки всех сохраненных партий
      * @description Помещает все партии в массив result, также калибрует id */
     static async loadGameData() {
+        console.log("loadGameData")
         try {
             let id = 0
             this.result = []
@@ -85,6 +86,7 @@ export class GameData {
         }
     }
     static async loadGoFinishGame(){
+        console.log("LOADGOFINISH")
         try {
             this.checkResponse =  await AsyncStorage.getItem(`GoFinishSingle`)
             this.goFinishSingle = this.checkResponse === 'null'  ? this.checkResponse
