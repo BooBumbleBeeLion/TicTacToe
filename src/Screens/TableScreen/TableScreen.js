@@ -3,8 +3,8 @@ import { StyleSheet, View, FlatList, BackHandler } from "react-native";
 import { BackBtnTop } from "../Widgets/BackBtnTop";
 import { HistoryPlayItem } from "../Widgets/HistoryPlayItem";
 import { GameData } from "../../GameData";
-import {setScreenAction} from "../../store/reducers/ScreenReducer";
 import {useDispatch} from "react-redux";
+import {setScreen} from "../../store/reducers/ScreenSlice";
 /**
  * Компонент отображения истории игр
  *
@@ -15,7 +15,7 @@ export const TableScreen = (props) => {
     let [gameData,setGameData] = useState(GameData.result)
 
     BackHandler.addEventListener("hardwareBackPress", () => {
-        dispatch(setScreenAction(0))
+        dispatch(setScreen(0))
         return true
     })
     return (

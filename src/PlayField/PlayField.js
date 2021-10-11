@@ -4,12 +4,12 @@ import { PlayRow } from './PlayRow';
 import { GameData } from '../GameData';
 import {useDispatch, useSelector} from "react-redux";
 import {
-    plusBotScoreAction,
-    plusFirstPlayerScoreAction,
-    plusPlayerScoreAction,
-    plusSecondPlayerScoreAction
-} from "../store/reducers/ScoreReducer";
-import {changeImageAction, restartGameAction, setGameAction} from "../store/reducers/GameReducer";
+    plusBotScore,
+    plusFirstPlayerScore,
+    plusPlayerScore,
+    plusSecondPlayerScore
+} from "../store/reducers/ScoreSlice";
+import {changeImage, restartGame, setGame} from "../store/reducers/GameSlice";
 /**
  * Компонент отрисовки игрового поля, содержит игровую логику
  * @param props - содержит:
@@ -38,30 +38,30 @@ let outputGameData = {
 export const PlayField = (props) => {
     dispatch = useDispatch()
 
-    bot = useSelector(state => state.ScreenReducer.bot)
+    bot = useSelector(state => state.ScreenSlice.bot)
 
     if (bot) {
         console.log('INIT BOT')
-        move = useSelector(state => state.GameReducer.singleMove)
-        images = useSelector(state => state.GameReducer.singleImages)
-        imagesId = useSelector(state => state.GameReducer.singleImagesId)
-        pressed = useSelector(state => state.GameReducer.singlePressed)
-        countPressed = useSelector(state => state.GameReducer.singleCountPressed)
+        move = useSelector(state => state.GameSlice.singleMove)
+        images = useSelector(state => state.GameSlice.singleImages)
+        imagesId = useSelector(state => state.GameSlice.singleImagesId)
+        pressed = useSelector(state => state.GameSlice.singlePressed)
+        countPressed = useSelector(state => state.GameSlice.singleCountPressed)
     } else {
         console.log('INIT PLAYERS')
-        move = useSelector(state => state.GameReducer.playersMove)
-        images = useSelector(state => state.GameReducer.playersImages)
-        imagesId = useSelector(state => state.GameReducer.playersImagesId)
-        pressed = useSelector(state => state.GameReducer.playersPressed)
-        countPressed = useSelector(state => state.GameReducer.playersCountPressed)
+        move = useSelector(state => state.GameSlice.playersMove)
+        images = useSelector(state => state.GameSlice.playersImages)
+        imagesId = useSelector(state => state.GameSlice.playersImagesId)
+        pressed = useSelector(state => state.GameSlice.playersPressed)
+        countPressed = useSelector(state => state.GameSlice.playersCountPressed)
     }
 
     const botGame = GameData.getGoFinishGame(true)
     const playersGame = GameData.getGoFinishGame(false)
     console.log(botGame + "     " + playersGame)
 
-    botGame !== 'null'  ? dispatch(setGameAction(botGame,true)) : null
-    playersGame !== 'null' ? dispatch(setGameAction(playersGame,false)) : null
+    botGame !== 'null'  ? dispatch(setGame(botGame)) : {}
+    playersGame !== 'null' ? dispatch(setGame(playersGame)) : {}
 
     return (
         <View style={styles.gridView}>
@@ -92,9 +92,7 @@ export function botMove(){
         let rndId = Math.floor(Math.random() * 9);
         while (pressed[rndId])
             rndId = Math.floor(Math.random() * 9);
-        dispatch(changeImageAction(rndId, bot))
-        // console.log('ЩА ПРОВЕРЮ ВЫИГРЫШ')
-        move = !move
+        dispatch(changeImage(rndId, bot))
         winGame()
     }
     console.log(move + '   ' +
@@ -117,14 +115,14 @@ function winGame() {
         // Вызов Алерта на смартфоне
         Alert.alert(
             "Конец игры!",
-            "Победили " + (move ? 'КРЕСТИКИ' : 'НОЛИКИ'),
+            "Победили " + (!move ? 'КРЕСТИКИ' : 'НОЛИКИ'),
             [
-                {text: "Заново", onPress: () => dispatch(restartGameAction(bot))}
+                {text: "Заново", onPress: () => dispatch(restartGame(bot))}
             ]
         )
-        move   ? (bot ? dispatch(plusPlayerScoreAction()) : dispatch(plusFirstPlayerScoreAction()))
-                : (bot ? dispatch(plusBotScoreAction()) : dispatch(plusSecondPlayerScoreAction()))
-        setOutputGameData(move)
+        !move   ? (bot ? dispatch(plusPlayerScore()) : dispatch(plusFirstPlayerScore()))
+                : (bot ? dispatch(plusBotScore()) : dispatch(plusSecondPlayerScore()))
+        setOutputGameData(!move)
         GameData.saveGoFinishGame('null', bot)
         GameData.saveGameData(outputGameData)
         return true
@@ -133,7 +131,7 @@ function winGame() {
             "Ничья!",
             "Победила ДРУЖБА",
             [
-                {text: "Заново", onPress: () => dispatch(restartGameAction(bot))}
+                {text: "Заново", onPress: () => dispatch(restartGame())}
             ]
         )
         setOutputGameData(null)

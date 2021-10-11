@@ -2,7 +2,7 @@ import React from "react";
 import { StyleSheet, View, Image, TouchableOpacity,Text } from "react-native";
 
 import back from "../../../assets/back.png"
-import {setScreenAction} from "../../store/reducers/ScreenReducer";
+import {setScreen} from "../../store/reducers/ScreenSlice";
 import {useDispatch} from "react-redux";
 /**
  * Компонент отрисовки кнопки возвращения в главное меню
@@ -12,14 +12,11 @@ import {useDispatch} from "react-redux";
 export const BackBtnTop = (props) => {
 
     const dispatch  = useDispatch();
-    const setScreen = (id) => {
-        dispatch(setScreenAction(id))
-    }
 
     return (
         <View style={styles.mainView}>
             <TouchableOpacity style={styles.btnBack}
-                              onPress={() => setScreen(0)}>
+                              onPress={() => dispatch(setScreen(0))}>
                 <Image style={styles.image} source={back}/>
                 <Text style={styles.text}>Назад</Text>
             </TouchableOpacity>

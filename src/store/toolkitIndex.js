@@ -1,10 +1,12 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import ScreenSlice from "./reducers/ScreenSlice";
-// import GameSlice from "./reducers/GameSlice";
+import ScoreSlice from "./reducers/ScoreSlice"
+import GameSlice from "./reducers/GameSlice";
 
 const rootReducer = combineReducers({
     ScreenSlice: ScreenSlice,
-    // GameSlice: GameSlice,
+    ScoreSlice: ScoreSlice,
+    GameSlice: GameSlice,
 })
 
 export const store = configureStore({

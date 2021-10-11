@@ -4,9 +4,7 @@ import { PlayField } from '../../PlayField/PlayField'
 import { CountDisplay } from "../Widgets/CountDisplay";
 import { BackBtnTop } from "../Widgets/BackBtnTop";
 import {useDispatch, useSelector} from "react-redux";
-import {setScreenAction} from "../../store/reducers/ScreenReducer";
-import {GameData} from "../../GameData";
-import {setGameAction} from "../../store/reducers/GameReducer";
+import {setScreen} from "../../store/reducers/ScreenSlice";
 /**
  * Компонент отображения игрового экрана
  *
@@ -18,19 +16,20 @@ import {setGameAction} from "../../store/reducers/GameReducer";
  * changeScore()-изменение счета игрока */
 export const GameScreen = (props) => {
     const dispatch = useDispatch();
-    const bot = useSelector(state => state.ScreenReducer.bot)
+    const bot = useSelector(state => state.ScreenSlice.bot)
+
     const move = useSelector(state =>
-        (bot  ? state.GameReducer.singleMove
-            : state.GameReducer.playersMove))
+        (bot  ? state.GameSlice.singleMove
+            : state.GameSlice.playersMove))
     const leftScore = useSelector(state =>
-        (bot  ? state.ScoreReducer.playerScore
-            : state.ScoreReducer.firstPlayerScore))
+        (bot  ? state.ScoreSlice.playerScore
+            : state.ScoreSlice.firstPlayerScore))
     const rightScore = useSelector(state =>
-        (bot  ? state.ScoreReducer.botScore
-            : state.ScoreReducer.secondPlayerScore))
+        (bot  ? state.ScoreSlice.botScore
+            : state.ScoreSlice.secondPlayerScore))
 
     BackHandler.addEventListener("hardwareBackPress", () => {
-        dispatch(setScreenAction(0))
+        dispatch(setScreen(0))
         return true
     })
     return (

@@ -1,6 +1,6 @@
 import React from "react";
 import {StyleSheet, TouchableOpacity, Text} from "react-native";
-import {setScreenAction} from "../../store/reducers/ScreenReducer";
+import {setScreen} from "../../store/reducers/ScreenSlice";
 import {useDispatch, useSelector} from "react-redux";
 /**
  * Компонент отрисовки кнопок навигации для начального экрана
@@ -12,12 +12,9 @@ import {useDispatch, useSelector} from "react-redux";
 export const MainButton = (props) => {
 
     const dispatch  = useDispatch();
-    const setScreen = (id) => {
-        dispatch(setScreenAction(id))
-    }
 
     return (
-        <TouchableOpacity style={styles.btnChild} onPress={() => setScreen(props.id)}>
+        <TouchableOpacity style={styles.btnChild} onPress={() => dispatch(setScreen(props.id))}>
             <Text style={styles.btnText}> {props.title} </Text>
         </TouchableOpacity>
     )

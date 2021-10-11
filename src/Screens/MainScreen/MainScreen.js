@@ -1,13 +1,10 @@
 import React from "react";
 import {StyleSheet, View, Image, BackHandler, Alert} from "react-native";
+import {useDispatch} from "react-redux";
 import { MainButton } from './MainButton';
 import { GameData } from "../../GameData";
-
 // Images
 import icon from '../../../assets/icon.png';
-import {setScreenAction} from "../../store/reducers/ScreenReducer";
-import {useDispatch} from "react-redux";
-import {restartGameAction, setGameAction} from "../../store/reducers/GameReducer";
 /**
  * Компонент отрисовки начального экрана с навигацией по другим экранам
  *

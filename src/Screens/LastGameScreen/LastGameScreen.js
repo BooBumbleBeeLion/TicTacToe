@@ -5,7 +5,7 @@ import { BackBtnTop } from "../Widgets/BackBtnTop";
 import { GameData } from "../../GameData";
 import { PreviewField } from "../Widgets/PreviewField";
 import {useDispatch} from "react-redux";
-import {setScreenAction} from "../../store/reducers/ScreenReducer";
+import {setScreen} from "../../store/reducers/ScreenSlice";
 /**
  * Компонент отображения последней сыгранной игры
  *
@@ -32,7 +32,7 @@ export const LastGameScreen = (props) => {
         }else alert("Вы еще не сыграли ни одной игры!")
     }
     BackHandler.addEventListener("hardwareBackPress", () => {
-        dispatch(setScreenAction(0))
+        dispatch(setScreen(0))
         return true
     })
 

@@ -3,7 +3,6 @@ import {StyleSheet, View, Text, Image} from "react-native";
 
 import athlete from "../../../assets/athlete.png"
 import chatbot from "../../../assets/chatbot.png"
-import {useSelector} from "react-redux";
 /**
  * Компонент отображения игрового состояния
  *
