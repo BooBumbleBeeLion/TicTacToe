@@ -93,7 +93,7 @@ export function botMove(){
         while (pressed[rndId])
             rndId = Math.floor(Math.random() * 9);
         dispatch(changeImage(rndId, bot))
-        // winGame()
+        winGame()
     }
     console.log(move + '   ' +
     images + '   ' +
