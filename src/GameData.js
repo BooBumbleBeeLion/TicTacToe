@@ -6,8 +6,7 @@ import { AsyncStorage } from "react-native";
  * Имеет статические поля и методы для работы с стором*/
 export class GameData {
 
-    static goFinishSingle
-    static goFinishPlayers
+    static goFinish
     static result = []
     static checkResponse
     static id = 0
@@ -29,8 +28,8 @@ export class GameData {
         else
             return null
     }
-    static getGoFinishGame(bot){
-        return bot ? this.goFinishSingle : this.goFinishPlayers
+    static getGoFinishGame(){
+        return this.goFinish
     }
     /**
      * Асинхронный метод для сохранения результатов партии
@@ -65,22 +64,15 @@ export class GameData {
         }
     }
 
-    static async saveGoFinishGame(gData, bot){
+    static async saveGoFinishGame(gData){
         try {
-            if(gData === 'null') {
-                if (bot)
-                    await AsyncStorage.setItem(`GoFinishSingle`, gData)
-                else
-                    await AsyncStorage.setItem(`GoFinishPlayers`, gData)
-            } else {
-                if (bot)
-                    await AsyncStorage.setItem(`GoFinishSingle`, JSON.stringify(gData))
-                else
-                    await AsyncStorage.setItem(`GoFinishPlayers`, JSON.stringify(gData))
-            }
+            console.log("saveGoFinishGame")
+            if(typeof gData === 'string')
+                await AsyncStorage.setItem(`GoFinish`, 'string')
+            else
+                await AsyncStorage.setItem(`GoFinish`, JSON.stringify(gData))
 
-            // console.log(JSON.stringify(gData))
-            // console.log(gData)
+
         } catch (error) {
             alert("Не удалось сохранить игру")
         }
@@ -88,17 +80,14 @@ export class GameData {
     static async loadGoFinishGame(){
         console.log("LOADGOFINISH")
         try {
-            this.checkResponse =  await AsyncStorage.getItem(`GoFinishSingle`)
-            this.goFinishSingle = this.checkResponse === 'null'  ? this.checkResponse
-                                                                : await JSON.parse(this.checkResponse)
+            this.checkResponse =  await AsyncStorage.getItem(`GoFinish`)
 
-            this.checkResponse =  await AsyncStorage.getItem(`GoFinishPlayers`)
-            this.goFinishPlayers = this.checkResponse === 'null' ? this.checkResponse
-                                                                : await JSON.parse(this.checkResponse)
+            this.goFinish = this.checkResponse === 'string'   ? this.checkResponse
+                                                            : JSON.parse(this.checkResponse)
 
-            console.log("LOAD: " + this.goFinishSingle + '     ' + this.goFinishPlayers)
+            console.log("LOAD: " + this.goFinish)
         } catch (error) {
-            alert("Не удалось загрузить результаты игр")
+            alert("Не удалось загрузить данные последней игры")
         }
     }
     /**

@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Image, TouchableOpacity } from 'react-native';
 import {useDispatch, useSelector} from "react-redux";
-import {changeImage} from "../store/reducers/GameSlice";
+import {changeImage, winGame} from "../store/reducers/GameSlice";
 import {botMove} from "./PlayField";
 /**
  * Компонент отрисовки игрового поля, содержит игровую логику
@@ -11,14 +11,17 @@ import {botMove} from "./PlayField";
  * changeImage()-метод изменения экрана */
 export const PlayBtn = (props) => {
     const dispatch  = useDispatch();
-    const bot = useSelector(state => state.ScreenSlice.bot)
+    const bot = useSelector(state => state.GameSlice.bot)
     const image = useSelector(state =>
         (bot  ? state.GameSlice.singleImages[props.btnId]
                     : state.GameSlice.playersImages[props.btnId]))
 
     function makeMove(btnId){
         dispatch(changeImage(btnId))
-        botMove()
+        dispatch(winGame())
+        setTimeout(function(){
+            botMove()
+        },Math.floor(Math.random() * 1000) + 1000) // Ожидает перед ходом 1-2 секунды
     }
 
     return (

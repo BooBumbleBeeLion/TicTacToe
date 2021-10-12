@@ -1,22 +1,17 @@
-import React, {useState} from "react";
+import React from "react";
 import { StyleSheet, View, BackHandler } from "react-native";
 import { PlayField } from '../../PlayField/PlayField'
 import { CountDisplay } from "../Widgets/CountDisplay";
 import { BackBtnTop } from "../Widgets/BackBtnTop";
 import {useDispatch, useSelector} from "react-redux";
+import {GameData} from "../../GameData";
 import {setScreen} from "../../store/reducers/ScreenSlice";
+import {setGame} from "../../store/reducers/GameSlice";
 /**
- * Компонент отображения игрового экрана
- *
- * @param props - содержит:
- * bot-с ботом или без;
- * leftScore-счет левого игрока;
- * rightScore-счет правого игрока;
- * changeScreen()-изменение id отображаемого экрана;
- * changeScore()-изменение счета игрока */
+ * Компонент отображения игрового экрана */
 export const GameScreen = (props) => {
     const dispatch = useDispatch();
-    const bot = useSelector(state => state.ScreenSlice.bot)
+    const bot = useSelector(state => state.GameSlice.bot)
 
     const move = useSelector(state =>
         (bot  ? state.GameSlice.singleMove
@@ -27,6 +22,9 @@ export const GameScreen = (props) => {
     const rightScore = useSelector(state =>
         (bot  ? state.ScoreSlice.botScore
             : state.ScoreSlice.secondPlayerScore))
+
+    const goFinish = GameData.getGoFinishGame()
+    dispatch(setGame(goFinish))
 
     BackHandler.addEventListener("hardwareBackPress", () => {
         dispatch(setScreen(0))

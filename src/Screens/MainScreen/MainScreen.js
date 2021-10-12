@@ -11,7 +11,6 @@ import icon from '../../../assets/icon.png';
  * @param props - содержит: Метод для изменения отображаемого экрана */
 export const MainScreen = (props) => {
     const dispatch = useDispatch();
-    // GameData.clearGameData()
     GameData.loadGameData()
 
     BackHandler.addEventListener("hardwareBackPress", () => {
