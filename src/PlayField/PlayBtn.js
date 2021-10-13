@@ -14,8 +14,8 @@ let win
  * @param {number} props-btnId номер кнопки на поле */
 export const PlayBtn = (props) => {
     const dispatch  = useDispatch();
-    const image = useSelector(state => bot  ? state.GameSlice.singleImages[props.btnId]
-            : state.GameSlice.playersImages[props.btnId])
+    const imageSingle = useSelector(state => state.GameSlice.singleImages[props.btnId])
+    const imagePlayers = useSelector(state => state.GameSlice.playersImages[props.btnId])
     bot = useSelector(state => state.GameSlice.bot)
     move = useSelector(state => bot  ? state.GameSlice.singleMove
         : state.GameSlice.playersMove)
@@ -36,7 +36,7 @@ export const PlayBtn = (props) => {
 
     return (
         <TouchableOpacity style={styles.ticButton} onPress={() => makeMove()}>
-            <Image style={styles.image} source={image}/>
+            <Image style={styles.image} source={bot? imageSingle : imagePlayers}/>
         </TouchableOpacity>
     )
 }
