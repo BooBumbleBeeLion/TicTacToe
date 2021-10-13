@@ -1,14 +1,13 @@
 import React from "react";
-import {StyleSheet, TouchableOpacity, Text} from "react-native";
-import {setScreen} from "../../store/reducers/ScreenSlice";
-import {useDispatch, useSelector} from "react-redux";
+import { StyleSheet, TouchableOpacity, Text } from "react-native";
+import { setScreen } from "../../store/reducers/ScreenSlice";
+import { useDispatch } from "react-redux";
 /**
  * Компонент отрисовки кнопок навигации для начального экрана
  *
  * @param props - содержит:
  * title-Подпись посередине кнопки;
- * id-экрана, за которым закреплена эта кнопка;
- * changeScreen(id)-изменение id отображаемого экрана*/
+ * id-экрана, за которым закреплена эта кнопка; */
 export const MainButton = (props) => {
 
     const dispatch  = useDispatch();

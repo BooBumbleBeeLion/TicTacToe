@@ -1,14 +1,11 @@
 import React from "react";
 import {StyleSheet, View, Image, BackHandler, Alert} from "react-native";
-import {useDispatch} from "react-redux";
 import { MainButton } from './MainButton';
 import { GameData } from "../../GameData";
 // Images
 import icon from '../../../assets/icon.png';
 /**
- * Компонент отрисовки начального экрана с навигацией по другим экранам
- *
- * @param props - содержит: Метод для изменения отображаемого экрана */
+ * Компонент отрисовки начального экрана с навигацией по другим экранам */
 export const MainScreen = (props) => {
     GameData.loadGameData()
 

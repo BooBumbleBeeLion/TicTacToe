@@ -5,14 +5,13 @@ import { PreviewPlayItem } from "../TableScreen/PreviewPlayItem";
 /**
  * Компонент карточки информации о сыгранной партии
  *
- * @param {item} - содержит:
- * gameData[]-массив литерал объектов информации о партиях */
+ * @param {object} item - gameData[]массив литерал объектов информации о партиях */
 export const HistoryPlayItem = ({ item }) => {
 
     return (
         <View key={item.id} style={styles.container}>
             <PreviewPlayItem item={item}/>
-            <PreviewField style={styles.previewPlayItem} id={item.id}/>
+            <PreviewField style={styles.previewPlayItem} id={item.id} />
         </View>
     )
 }

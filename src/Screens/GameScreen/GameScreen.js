@@ -3,10 +3,10 @@ import { StyleSheet, View, BackHandler } from "react-native";
 import { PlayField } from '../../PlayField/PlayField'
 import { CountDisplay } from "../Widgets/CountDisplay";
 import { BackBtnTop } from "../Widgets/BackBtnTop";
-import {useDispatch, useSelector} from "react-redux";
-import {GameData} from "../../GameData";
-import {setScreen} from "../../store/reducers/ScreenSlice";
-import {setGame} from "../../store/reducers/GameSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { GameData } from "../../GameData";
+import { setScreen } from "../../store/reducers/ScreenSlice";
+import { setGame } from "../../store/reducers/GameSlice";
 /**
  * Компонент отображения игрового экрана */
 export const GameScreen = (props) => {

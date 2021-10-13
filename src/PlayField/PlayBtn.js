@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Image, TouchableOpacity } from 'react-native';
-import {useDispatch, useSelector} from "react-redux";
-import {changeImage, winGame} from "../store/reducers/GameSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { changeImage, winGame } from "../store/reducers/GameSlice";
 import cross from "../../assets/krest.png";
 import circle from "../../assets/circle.png";
 let imagesId
@@ -11,12 +11,11 @@ let move
 let win
 /**
  * Компонент отрисовки игровой кнопки, содержит игровую логику
- * @param props - содержит:
- * btnId-номер кнопки на поле */
-export const PlayBtn = (btnId) => {
+ * @param {number} props-btnId номер кнопки на поле */
+export const PlayBtn = (props) => {
     const dispatch  = useDispatch();
-    const image = useSelector(state => bot  ? state.GameSlice.singleImages[btnId]
-            : state.GameSlice.playersImages[btnId])
+    const image = useSelector(state => bot  ? state.GameSlice.singleImages[props.btnId]
+            : state.GameSlice.playersImages[props.btnId])
     bot = useSelector(state => state.GameSlice.bot)
     move = useSelector(state => bot  ? state.GameSlice.singleMove
         : state.GameSlice.playersMove)
@@ -26,11 +25,9 @@ export const PlayBtn = (btnId) => {
         : state.GameSlice.playersCountPressed)
     win = useSelector(state => state.GameSlice.win)
     /**
-     * Функция для совершения хода, проверки выигрыша
-     * @param {number} btnId - Номер кнропки на игровом поле
-     * @description Вызывает метод из */
-    function makeMove(btnId){
-        dispatch(changeImage(btnId))
+     * Функция для совершения хода, проверки выигрыша */
+    function makeMove(){
+        dispatch(changeImage(props.btnId))
         dispatch(winGame())
         setTimeout(function(){
             botMove()
@@ -38,7 +35,7 @@ export const PlayBtn = (btnId) => {
     }
 
     return (
-        <TouchableOpacity style={styles.ticButton} onPress={() => makeMove(btnId)}>
+        <TouchableOpacity style={styles.ticButton} onPress={() => makeMove()}>
             <Image style={styles.image} source={image}/>
         </TouchableOpacity>
     )

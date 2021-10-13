@@ -1,14 +1,10 @@
 import React from "react";
 import { StyleSheet, View, Image, TouchableOpacity,Text } from "react-native";
-
+import { setScreen } from "../../store/reducers/ScreenSlice";
+import { useDispatch } from "react-redux";
 import back from "../../../assets/back.png"
-import {setScreen} from "../../store/reducers/ScreenSlice";
-import {useDispatch} from "react-redux";
 /**
- * Компонент отрисовки кнопки возвращения в главное меню
- *
- * @param props - содержит:
- * changeScreen()-изменение id отображаемого экрана */
+ * Компонент отрисовки кнопки возвращения в главное меню */
 export const BackBtnTop = (props) => {
 
     const dispatch  = useDispatch();

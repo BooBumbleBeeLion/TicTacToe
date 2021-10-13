@@ -1,16 +1,13 @@
 import React, {useState} from "react";
 import { StyleSheet, View, BackHandler } from "react-native";
+import { useDispatch } from "react-redux";
 import { CountDisplay } from "../Widgets/CountDisplay";
 import { BackBtnTop } from "../Widgets/BackBtnTop";
-import { GameData } from "../../GameData";
 import { PreviewField } from "../Widgets/PreviewField";
-import {useDispatch} from "react-redux";
-import {setScreen} from "../../store/reducers/ScreenSlice";
+import { GameData } from "../../GameData";
+import { setScreen } from "../../store/reducers/ScreenSlice";
 /**
- * Компонент отображения последней сыгранной игры
- *
- * @param props - содержит:
- * changeScreen()-изменение id отображаемого экрана */
+ * Компонент отображения последней сыгранной игры */
 export const LastGameScreen = (props) => {
     const dispatch = useDispatch();
     let lastGame = {}
@@ -38,7 +35,7 @@ export const LastGameScreen = (props) => {
 
     return (
         <View style={styles.container}>
-            <BackBtnTop changeScreen={props.changeScreen}/>
+            <BackBtnTop/>
             <View style={styles.playersView}>
                 <CountDisplay text={leftState} player={'left'} move={move} bot={false}/>
                 <CountDisplay text={rightState} player={'right'} move={!move} bot={bot}/>

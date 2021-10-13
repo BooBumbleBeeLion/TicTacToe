@@ -6,10 +6,7 @@ import { GameData } from "../../GameData";
 import {useDispatch} from "react-redux";
 import {setScreen} from "../../store/reducers/ScreenSlice";
 /**
- * Компонент отображения истории игр
- *
- * @param props - содержит:
- * changeScreen()-изменение id отображаемого экрана */
+ * Компонент отображения истории игр */
 export const TableScreen = (props) => {
     const dispatch = useDispatch();
     let [gameData,setGameData] = useState(GameData.result)
@@ -20,7 +17,7 @@ export const TableScreen = (props) => {
     })
     return (
         <View style={ styles.container }>
-            <BackBtnTop changeScreen={props.changeScreen} />
+            <BackBtnTop/>
             <FlatList
                 style={styles.flatList}
                 data={gameData}

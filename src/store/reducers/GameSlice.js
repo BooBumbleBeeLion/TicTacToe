@@ -5,7 +5,8 @@ import { restart } from "../../PlayField/PlayField"
 import krest from "../../../assets/krest.png";
 import circle from "../../../assets/circle.png";
 
-
+/**
+ * Объект Slice из Redux toolkit*/
 const GameSlice = createSlice({
     name:'GameSlice',
     initialState:{
@@ -29,6 +30,7 @@ const GameSlice = createSlice({
         setGame: true,
     },
     reducers:{
+        /** Редусер для смены картинки на поле(совершение хода) */
         changeImage(state, action){
             if(state.bot) {
                 if (!state.singlePressed[action.payload]){
@@ -37,12 +39,6 @@ const GameSlice = createSlice({
                     state.singlePressed[action.payload] = true
                     state.singleMove = !state.singleMove
                     state.singleCountPressed = state.singleCountPressed+1
-                    console.log("ДАННЫЕ GAME ИЗМЕНЕНЫ ПРИ ХОДЕ: " +
-                        state.singleMove + ' | ' +
-                        state.singleImages + ' | ' +
-                        state.singleImagesId + ' | ' +
-                        state.singlePressed + ' | ' +
-                        state.singleCountPressed)
                 }
             }else {
                 if (!state.playersPressed[action.payload]){
@@ -51,15 +47,10 @@ const GameSlice = createSlice({
                     state.playersPressed[action.payload] = true
                     state.playersMove = !state.playersMove
                     state.playersCountPressed = state.playersCountPressed+1
-                    console.log("ДАННЫЕ GAME ИЗМЕНЕНЫ ПРИ ХОДЕ: " +
-                        state.playersMove + ' | ' +
-                        state.playersImages + ' | ' +
-                        state.playersImagesId + ' | ' +
-                        state.playersPressed + ' | ' +
-                        state.playersCountPressed)
                 }
             }
         },
+        /** Редусер для сброса игрового состояния текущего режима игры до дефолта */
         restartGame(state){
             console.log("RESTART")
             if(state.bot) {
@@ -77,6 +68,7 @@ const GameSlice = createSlice({
             }
             state.win = false
         },
+        /** Редусер для задания конкретного полного игрового состояния приложения */
         setGame(state,action) {
             if(state.setGame) {
                 state.singleMove = action.payload?.singleMove ?? true
@@ -96,9 +88,11 @@ const GameSlice = createSlice({
                 state.setGame = false
             }
         },
+        /** Редусер для задания играем с ботом или нет) */
         setBot(state,action){
             state.bot = action.payload
         },
+        /** Редусер для проверки выигрыша на игровом поле */
         winGame(state) {
             let outputGameData
             let bot = state.bot
@@ -108,12 +102,6 @@ const GameSlice = createSlice({
                 : Object.assign([], state.playersImagesId)
             let countPressed = state.bot ? state.singleCountPressed
                 : state.playersCountPressed
-
-            console.log("WINGAME: " +
-                move.toString() + ' | ' +
-                imagesId + ' | ' +
-                countPressed + ' | ' +
-                state.bot)
 
             if ((imagesId[0] === imagesId[1] && imagesId[0] === imagesId[2]) ||
                 (imagesId[3] === imagesId[4] && imagesId[3] === imagesId[5]) ||
@@ -169,7 +157,11 @@ const GameSlice = createSlice({
 
     }
 })
-
+/**
+ * Метод для формирования объекта с данными о выигранной партии
+ * @param {object} state - состояние игровых данных
+ * @param {boolean} move - состояние хода
+ * @return {object} Литерал объект информации о выигранной партии */
 function setOutputGameData(state, move){
     let outputGameData = {
         id: 0,
