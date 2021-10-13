@@ -6,7 +6,8 @@ import { GameScreen } from './src/Screens/GameScreen/GameScreen';
 import { TableScreen } from './src/Screens/TableScreen/TableScreen';
 import { LastGameScreen } from "./src/Screens/LastGameScreen/LastGameScreen";
 import { setBot } from "./src/store/reducers/GameSlice";
-
+/**
+ * Основной компонент для отображения всех компонентов */
 export function App() {
     const dispatch  = useDispatch();
     const screenId = useSelector(state => state.ScreenSlice.screenId)

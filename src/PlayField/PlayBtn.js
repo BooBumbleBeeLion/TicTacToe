@@ -2,20 +2,33 @@ import React from 'react';
 import { StyleSheet, Image, TouchableOpacity } from 'react-native';
 import {useDispatch, useSelector} from "react-redux";
 import {changeImage, winGame} from "../store/reducers/GameSlice";
-import {botMove} from "./PlayField";
+import cross from "../../assets/krest.png";
+import circle from "../../assets/circle.png";
+let imagesId
+let bot
+let countPressed
+let move
+let win
 /**
- * Компонент отрисовки игрового поля, содержит игровую логику
+ * Компонент отрисовки игровой кнопки, содержит игровую логику
  * @param props - содержит:
- * btnId-номер кнопки на поле на поле;
- * images-состояние картинки данной кнопки;
- * changeImage()-метод изменения экрана */
-export const PlayBtn = (props) => {
+ * btnId-номер кнопки на поле */
+export const PlayBtn = (btnId) => {
     const dispatch  = useDispatch();
-    const bot = useSelector(state => state.GameSlice.bot)
-    const image = useSelector(state =>
-        (bot  ? state.GameSlice.singleImages[props.btnId]
-                    : state.GameSlice.playersImages[props.btnId]))
-
+    const image = useSelector(state => bot  ? state.GameSlice.singleImages[btnId]
+            : state.GameSlice.playersImages[btnId])
+    bot = useSelector(state => state.GameSlice.bot)
+    move = useSelector(state => bot  ? state.GameSlice.singleMove
+        : state.GameSlice.playersMove)
+    imagesId = useSelector(state => bot ? state.GameSlice.singleImagesId
+        : state.GameSlice.playersImagesId)
+    countPressed = useSelector(state => bot ? state.GameSlice.singleCountPressed
+        : state.GameSlice.playersCountPressed)
+    win = useSelector(state => state.GameSlice.win)
+    /**
+     * Функция для совершения хода, проверки выигрыша
+     * @param {number} btnId - Номер кнропки на игровом поле
+     * @description Вызывает метод из */
     function makeMove(btnId){
         dispatch(changeImage(btnId))
         dispatch(winGame())
@@ -25,10 +38,94 @@ export const PlayBtn = (props) => {
     }
 
     return (
-        <TouchableOpacity style={styles.ticButton} onPress={() => makeMove(props.btnId)}>
+        <TouchableOpacity style={styles.ticButton} onPress={() => makeMove(btnId)}>
             <Image style={styles.image} source={image}/>
         </TouchableOpacity>
     )
+}
+/**
+ * Метод хода бота, если это разрешено*/
+const botMove = () => {
+    if(bot && countPressed !== 9 && !move && !win ) {
+        // Если бот, то выполняется ход следующий сразу без смены состояния очереди хода
+        // TODO: Серега доделай ход бота, чисто чтоб bestScore выбавал куда ходить и все, здесь все готово,бот ходит через 1-2 сек после крестиков(см. PlayBtn)
+        console.log('ХОД БОТА' + win.toString())
+        // let bestMove = bestScore(imagesId,3,3)
+        // dispatch(changeImage(bestMove))
+    }
+}
+
+const bestScore = (board, rowLength, columnLength) => {
+    let bestScore = -Infinity
+    let bestMove = 4;
+
+    for (let i = 0; i < rowLength*columnLength.length; i++){
+        if (board[i].image === null){
+            board[i].image = cross
+            let score = minimax(board, 0, false, rowLength, columnLength)
+            board[i].image = null
+            if (score > bestScore){
+                bestScore = score
+                bestMove = i
+            }
+        }
+    }
+    return bestMove
+}
+const minimax = (board, depth, isMaximazing, rowLength, columnLenght) => {
+    let scores = {
+        "X": 1,
+        "O": -1,
+        "Draw": 0
+    }
+    let result = checkWinning(board, cross)
+    if (result !== undefined){
+        return scores[result]
+    }
+
+    if (isMaximazing){
+        let bestScore = -Infinity
+        for (let i = 0; i < rowLength*columnLenght.length; i++){
+            if (board[i].image === null){
+                board[i].image = cross
+                let score = minimax(board, depth + 1, false, rowLength, columnLenght)
+                board[i].image = null
+                if (score > bestScore){
+                    bestScore = score
+                }
+            }
+        }
+        return bestScore
+    } else {
+        let bestScore = Infinity
+        for (let i = 0; i < rowLength*columnLenght.length; i++){
+            if (board[i].image === null){
+                board[i].image = circle
+                let score = minimax(board, depth + 1, true, rowLength, columnLenght)
+                board[i].image = null
+                if (score < bestScore){
+                    bestScore = score
+                }
+            }
+        }
+        return bestScore
+    }
+}
+const checkWinning = (board, player) => {
+    if(
+        (board[0].image === player && board[1].image === player && board[2].image === player) ||
+        (board[3].image === player && board[4].image === player && board[5].image === player) ||
+        (board[6].image === player && board[7].image === player && board[8].image === player) ||
+        (board[0].image === player && board[3].image === player && board[6].image === player) ||
+        (board[1].image === player && board[4].image === player && board[7].image === player) ||
+        (board[2].image === player && board[5].image === player && board[8].image === player) ||
+        (board[0].image === player && board[4].image === player && board[8].image === player) ||
+        (board[2].image === player && board[4].image === player && board[6].image === player)
+    ) {
+        return player === cross ? "X" : "O"
+    } else if (count === 5){
+        return "Draw"
+    }
 }
 
 const styles = StyleSheet.create({

@@ -4,7 +4,8 @@ import { Provider } from 'react-redux';
 import { App } from './App';
 import { store } from './src/store'
 import {GameData} from "./src/GameData";
-
+/**
+ * Корневой класс для инициализации магазина Redux */
 class index extends Component {
 
     constructor(){

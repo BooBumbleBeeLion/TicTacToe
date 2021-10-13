@@ -14,13 +14,13 @@ export class GameData {
     /**
      * Метод для передачи конкретной партии
      * @param {number} id-номер партии
-     * @return {{}}*/
+     * @return {object} Конкретная партия*/
     static getGame(id){
         return this.result[id];
     }
     /**
      * Метод для передачи последней сыгранной партии
-     * @return {{gameData}}
+     * @return {object} Последняя партия
      * @description При отстутствии игр возвращает null*/
     static getLastGame(){
         if(this.result.length)
@@ -28,12 +28,15 @@ export class GameData {
         else
             return null
     }
+    /**
+     * Возвращает последнее последнее состояние игры
+     * @return {object} Последнее состояние игры */
     static getGoFinishGame(){
         return this.goFinish
     }
     /**
      * Асинхронный метод для сохранения результатов партии
-     * @param {{}} gData - сформированный литерал объект с данными партии*/
+     * @param {object} gData - сформированный литерал объект с данными партии*/
     static async saveGameData(gData) {
         try {
             this.gameData = gData
@@ -63,7 +66,10 @@ export class GameData {
             alert("Не удалось загрузить результаты игр")
         }
     }
-
+    /**
+     * Асинхронный метод для сохранение состояния игры в приложении
+     * @param {object,string} gData - записываемое поле
+     * @description Строкое значение обозначает дефолтное состояние игры*/
     static async saveGoFinishGame(gData){
         try {
             console.log("saveGoFinishGame")
@@ -77,6 +83,9 @@ export class GameData {
             alert("Не удалось сохранить игру")
         }
     }
+    /**
+     * Асинхронный метод для загрузки последнего состояния игры перед выходом
+     * @description Помещает последнее состояние в переменную goFinish */
     static async loadGoFinishGame(){
         console.log("LOADGOFINISH")
         try {
