@@ -7,9 +7,12 @@ import circle from "../../assets/circle.png";
 let dispatch
 let imagesId
 let bot
+let images;
 let countPressed
+let copyImages = [null, null, null, null, null, null, null, null, null]
 let move
 let win
+let bestMove
 /**
  * Компонент отрисовки игровой кнопки, содержит игровую логику
  * @param {number} props-btnId номер кнопки на поле */
@@ -25,14 +28,21 @@ export const PlayBtn = (props) => {
     countPressed = useSelector(state => bot ? state.GameSlice.singleCountPressed
         : state.GameSlice.playersCountPressed)
     win = useSelector(state => state.GameSlice.win)
+    images = useSelector(state => bot ? state.GameSlice.singleImages
+        : state.GameSlice.playersImages)
+    if (win){
+        copyImages = [null, null, null, null, null, null, null, null, null]
+    }
     /**
      * Функция для совершения хода, проверки выигрыша */
     function makeMove(){
         dispatch(changeImage(props.btnId))
-        dispatch(winGame())
+        copyImages[props.btnId] = 2
+        dispatch(winGame())// Ожидает перед ходом 1-2 секунды
         setTimeout(function(){
-            botMove()
-        },Math.floor(Math.random() * 1000) + 1000) // Ожидает перед ходом 1-2 секунды
+            botMove(copyImages),
+            console.log("BOT MOVE")
+        },Math.floor(Math.random() * 1000) + 1000) 
     }
 
     return (
@@ -43,24 +53,27 @@ export const PlayBtn = (props) => {
 }
 /**
  * Метод хода бота, если это разрешено*/
-const botMove = () => {
-    if(bot && countPressed !== 9 && !move && !win ) {
+const botMove = (copyImages) => {
+    console.log("bot: " + bot + " countPressed: " + countPressed + " move: " + !move + "  win: " + !win )
+    if(countPressed !== 9){
         console.log('ХОД БОТА' + win.toString())
-        // let bestMove = bestScore(imagesId,3,3)
-        // dispatch(changeImage(bestMove))
-        // dispatch(winGame())
+        bestMove = bestScore(copyImages, 3, 3)
+        copyImages[bestMove] = 2
+        console.log("ХОД БОТА ПОЗИЦИЯ НАХУЙ: " + bestMove);
+        dispatch(changeImage(bestMove))
+        dispatch(winGame())
     }
 }
 
 const bestScore = (board, rowLength, columnLength) => {
     let bestScore = -Infinity
-    let bestMove = 4;
-
-    for (let i = 0; i < rowLength*columnLength.length; i++){
-        if (board[i].image === null){
-            board[i].image = cross
+    let bestMove = Math.floor(Math.random() * (8));
+    
+    for (let i = 0; i < rowLength*columnLength; i++){
+        if (board[i] === null){
+            board[i] = 2
             let score = minimax(board, 0, false, rowLength, columnLength)
-            board[i].image = null
+            board[i] = null
             if (score > bestScore){
                 bestScore = score
                 bestMove = i
@@ -75,18 +88,18 @@ const minimax = (board, depth, isMaximazing, rowLength, columnLenght) => {
         "O": -1,
         "Draw": 0
     }
-    let result = checkWinning(board, cross)
+    let result = checkWinning(board, 2)
     if (result !== undefined){
         return scores[result]
     }
 
     if (isMaximazing){
         let bestScore = -Infinity
-        for (let i = 0; i < rowLength*columnLenght.length; i++){
-            if (board[i].image === null){
-                board[i].image = cross
+        for (let i = 0; i < rowLength*columnLenght; i++){
+            if (board[i] === null){
+                board[i] = 2
                 let score = minimax(board, depth + 1, false, rowLength, columnLenght)
-                board[i].image = null
+                board[i] = null
                 if (score > bestScore){
                     bestScore = score
                 }
@@ -95,11 +108,11 @@ const minimax = (board, depth, isMaximazing, rowLength, columnLenght) => {
         return bestScore
     } else {
         let bestScore = Infinity
-        for (let i = 0; i < rowLength*columnLenght.length; i++){
-            if (board[i].image === null){
-                board[i].image = circle
+        for (let i = 0; i < rowLength*columnLenght; i++){
+            if (board[i] === null){
+                board[i] = 3
                 let score = minimax(board, depth + 1, true, rowLength, columnLenght)
-                board[i].image = null
+                board[i] = null
                 if (score < bestScore){
                     bestScore = score
                 }
@@ -110,17 +123,17 @@ const minimax = (board, depth, isMaximazing, rowLength, columnLenght) => {
 }
 const checkWinning = (board, player) => {
     if(
-        (board[0].image === player && board[1].image === player && board[2].image === player) ||
-        (board[3].image === player && board[4].image === player && board[5].image === player) ||
-        (board[6].image === player && board[7].image === player && board[8].image === player) ||
-        (board[0].image === player && board[3].image === player && board[6].image === player) ||
-        (board[1].image === player && board[4].image === player && board[7].image === player) ||
-        (board[2].image === player && board[5].image === player && board[8].image === player) ||
-        (board[0].image === player && board[4].image === player && board[8].image === player) ||
-        (board[2].image === player && board[4].image === player && board[6].image === player)
+        (board[0] === player && board[1] === player && board[2] === player) ||
+        (board[3] === player && board[4] === player && board[5] === player) ||
+        (board[6] === player && board[7] === player && board[8] === player) ||
+        (board[0] === player && board[3] === player && board[6] === player) ||
+        (board[1] === player && board[4] === player && board[7] === player) ||
+        (board[2] === player && board[5] === player && board[8] === player) ||
+        (board[0] === player && board[4] === player && board[8] === player) ||
+        (board[2] === player && board[4] === player && board[6] === player)
     ) {
         return player === cross ? "X" : "O"
-    } else if (count === 5){
+    } else if (countPressed === 9){
         return "Draw"
     }
 }
