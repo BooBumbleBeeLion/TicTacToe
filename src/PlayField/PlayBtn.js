@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { changeImage, winGame } from "../store/reducers/GameSlice";
 import cross from "../../assets/krest.png";
 import circle from "../../assets/circle.png";
+let dispatch
 let imagesId
 let bot
 let countPressed
@@ -13,7 +14,7 @@ let win
  * Компонент отрисовки игровой кнопки, содержит игровую логику
  * @param {number} props-btnId номер кнопки на поле */
 export const PlayBtn = (props) => {
-    const dispatch  = useDispatch();
+    dispatch  = useDispatch();
     const imageSingle = useSelector(state => state.GameSlice.singleImages[props.btnId])
     const imagePlayers = useSelector(state => state.GameSlice.playersImages[props.btnId])
     bot = useSelector(state => state.GameSlice.bot)
@@ -44,11 +45,10 @@ export const PlayBtn = (props) => {
  * Метод хода бота, если это разрешено*/
 const botMove = () => {
     if(bot && countPressed !== 9 && !move && !win ) {
-        // Если бот, то выполняется ход следующий сразу без смены состояния очереди хода
-        // TODO: Серега доделай ход бота, чисто чтоб bestScore выбавал куда ходить и все, здесь все готово,бот ходит через 1-2 сек после крестиков(см. PlayBtn)
         console.log('ХОД БОТА' + win.toString())
         // let bestMove = bestScore(imagesId,3,3)
         // dispatch(changeImage(bestMove))
+        // dispatch(winGame())
     }
 }
 
