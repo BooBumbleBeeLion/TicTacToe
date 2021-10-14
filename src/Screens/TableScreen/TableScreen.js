@@ -1,15 +1,17 @@
 import React, {useState} from "react";
-import { StyleSheet, View, FlatList, BackHandler } from "react-native";
+import {StyleSheet, View, FlatList, BackHandler, TouchableOpacity} from "react-native";
 import { BackBtnTop } from "../Widgets/BackBtnTop";
-import { HistoryPlayItem } from "../Widgets/HistoryPlayItem";
 import { GameData } from "../../GameData";
 import {useDispatch} from "react-redux";
 import {setScreen} from "../../store/reducers/ScreenSlice";
+import {PreviewPlayItem} from "./PreviewPlayItem";
+import {PreviewField} from "../Widgets/PreviewField";
 /**
  * Компонент отображения истории игр */
 export const TableScreen = (props) => {
     const dispatch = useDispatch();
     let [gameData,setGameData] = useState(GameData.result)
+    let [prev, setPrev] = useState(null)
 
     BackHandler.addEventListener("hardwareBackPress", () => {
         dispatch(setScreen(0))
@@ -21,7 +23,18 @@ export const TableScreen = (props) => {
             <FlatList
                 style={styles.flatList}
                 data={gameData}
-                renderItem={HistoryPlayItem}
+                renderItem={({item}) => {
+                    return(
+                    <View key={item.id} style={styles.prevContainer}>
+                        <TouchableOpacity onPress={() => prev !== item.id ? setPrev(item.id) : setPrev(null)}>
+                            <PreviewPlayItem item={item}/>
+                        </TouchableOpacity>
+                        {(prev === item.id &&
+                            <PreviewField style={styles.previewPlayItem} id={item.id}/>
+                        )}
+                    </View>
+                    )
+                }}
                 showsVerticalScrollIndicator={false}
             />
         </View>
@@ -36,7 +49,17 @@ const styles = StyleSheet.create({
         justifyContent: 'space-around',
         padding: 20
     },
+    prevContainer: {
+        flex: 1,
+        width: '100%',
+        alignItems: 'center',
+        justifyContent: 'space-around',
+    },
+    previewPlayItem: {
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
     flatList: {
         top: '3%',
-    }
+    },
 })
