@@ -61,7 +61,4 @@ const styles = StyleSheet.create({
         width: '100%',
         // top: '5%'
     },
-    previewField: {
-
-    }
 })

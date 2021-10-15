@@ -1,17 +1,18 @@
-import React, {useState} from "react";
-import {StyleSheet, View, FlatList, BackHandler, TouchableOpacity} from "react-native";
+import React, { useState } from "react";
+import { StyleSheet, View, FlatList, BackHandler, TouchableOpacity } from "react-native";
 import { BackBtnTop } from "../Widgets/BackBtnTop";
 import { GameData } from "../../GameData";
-import {useDispatch} from "react-redux";
-import {setScreen} from "../../store/reducers/ScreenSlice";
-import {PreviewPlayItem} from "./PreviewPlayItem";
-import {PreviewField} from "../Widgets/PreviewField";
+import { useDispatch } from "react-redux";
+import { setScreen } from "../../store/reducers/ScreenSlice";
+import { PreviewPlayItem } from "./PreviewPlayItem";
+import { PreviewField } from "../Widgets/PreviewField";
 /**
  * Компонент отображения истории игр */
 export const TableScreen = (props) => {
     const dispatch = useDispatch();
     let result = GameData.result
     let out = []
+    // Инвертирую массив, сначала отображаются последние игры
     for(let i = 0,y=result.length-1; i < result.length; i++,y--) {
         out[i] = result[y]
     }

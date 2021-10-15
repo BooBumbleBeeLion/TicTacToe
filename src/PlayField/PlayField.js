@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { PlayRow } from './PlayRow';
 import { useDispatch, useSelector } from "react-redux";
-import { restartGame } from "../store/reducers/GameSlice";
+import {restartGame, winGame} from "../store/reducers/GameSlice";
 import { plusBotScore, plusFirstPlayerScore, plusPlayerScore, plusSecondPlayerScore } from "../store/reducers/ScoreSlice";
 let dispatch
 let bot
@@ -28,11 +28,13 @@ export const PlayField = (props) => {
  * Экспортируемый Метод рестарта игрового состояния и инкрементирования счёта победителя */
 export function restart(bot, move){
     dispatch(restartGame())
+    dispatch(winGame()) // Для записи в goPlay нового состояния поля после рестарта
     if(move !== null) {
         if (bot)
             move ? dispatch(plusPlayerScore()) : dispatch(plusBotScore())
-        else
+        else {
             move ? dispatch(plusFirstPlayerScore()) : dispatch(plusSecondPlayerScore())
+        }
     }
 }
 

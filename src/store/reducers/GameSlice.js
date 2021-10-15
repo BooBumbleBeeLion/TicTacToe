@@ -120,7 +120,7 @@ const GameSlice = createSlice({
                     ]
                 )
                 outputGameData = setOutputGameData(state, !move)
-                GameData.saveGoFinishGame('nul')
+                // GameData.saveGoFinishGame('nul')
                 GameData.saveGameData(outputGameData)
             } else if (countPressed === 9) {
                 state.win = true
@@ -132,7 +132,7 @@ const GameSlice = createSlice({
                     ]
                 )
                 outputGameData = setOutputGameData(state, null)
-                GameData.saveGoFinishGame('nul')
+                // GameData.saveGoFinishGame('nul')
                 GameData.saveGameData(outputGameData)
             }
             if(!state.win) {

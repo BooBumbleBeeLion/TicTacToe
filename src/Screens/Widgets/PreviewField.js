@@ -6,8 +6,8 @@ import circle from "../../../assets/circle.png";
 
 /**
  * Компонент отрисовки игрового поля, содержит игровую логику
- * @param {number} id - загрузка конкретного матча по его id
- * @param {boolean} last - отображать последнюю игру или нет*/
+ * @param {number} props id - загрузка конкретного матча по его id;
+ * @param {boolean} props last - отображать последнюю игру или нет*/
 export const PreviewField = (props) => {
     const rowLength = 3
     const columnLenght = Array.from(Array(3).keys())

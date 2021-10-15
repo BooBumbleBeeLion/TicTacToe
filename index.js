@@ -3,7 +3,7 @@ import { registerRootComponent } from 'expo';
 import { Provider } from 'react-redux';
 import { App } from './App';
 import { store } from './src/store'
-import {GameData} from "./src/GameData";
+import { GameData } from "./src/GameData";
 /**
  * Корневой класс для инициализации магазина Redux */
 class index extends Component {
@@ -11,8 +11,8 @@ class index extends Component {
     constructor(){
         super()
         GameData.loadGoFinishGame()
-        // GameData.saveGoFinishGame('string')
         // GameData.clearGameData()
+        // GameData.saveGoFinishGame('string')
     }
 
     render() {

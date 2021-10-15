@@ -1,5 +1,5 @@
 import React from "react";
-import {StyleSheet, View, Image, BackHandler, Alert} from "react-native";
+import { StyleSheet, View, Image, BackHandler, Alert } from "react-native";
 import { MainButton } from './MainButton';
 import { GameData } from "../../GameData";
 // Images

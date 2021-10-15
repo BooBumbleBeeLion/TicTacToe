@@ -3,7 +3,7 @@ import { StyleSheet, View } from 'react-native';
 import { PlayBtn } from './PlayBtn'
 /**
  * Компонент отрисовки игрового поля, содержит игровую логику
- * @param {number} rowId -номер строки на поле */
+ * @param {number} props rowId -номер строки на поле */
 export const PlayRow = (props) => {
     return (
         <View style={styles.rowView}>

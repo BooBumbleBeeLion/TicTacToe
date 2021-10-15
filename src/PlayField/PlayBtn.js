@@ -3,13 +3,12 @@ import { StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { useDispatch, useSelector } from "react-redux";
 import { changeImage, winGame } from "../store/reducers/GameSlice";
 import cross from "../../assets/krest.png";
-import circle from "../../assets/circle.png";
 let dispatch
 let imagesId
 let bot
-let images;
+let pressed
 let countPressed
-let copyImages = [null, null, null, null, null, null, null, null, null]
+let copyImages = []
 let move
 let win
 let bestMove
@@ -25,24 +24,24 @@ export const PlayBtn = (props) => {
         : state.GameSlice.playersMove)
     imagesId = useSelector(state => bot ? state.GameSlice.singleImagesId
         : state.GameSlice.playersImagesId)
+    pressed = useSelector(state => bot ? state.GameSlice.singlePressed
+        : state.GameSlice.playersPressed)
     countPressed = useSelector(state => bot ? state.GameSlice.singleCountPressed
         : state.GameSlice.playersCountPressed)
     win = useSelector(state => state.GameSlice.win)
-    images = useSelector(state => bot ? state.GameSlice.singleImages
-        : state.GameSlice.playersImages)
     if (win){
-        copyImages = [null, null, null, null, null, null, null, null, null]
+        copyImages = []
     }
     /**
      * Функция для совершения хода, проверки выигрыша */
     function makeMove(){
         dispatch(changeImage(props.btnId))
         copyImages[props.btnId] = 2
-        dispatch(winGame())// Ожидает перед ходом 1-2 секунды
+        dispatch(winGame())
+        // Ожидает перед ходом 0.1 секунды
         setTimeout(function(){
-            botMove(copyImages),
-            console.log("BOT MOVE")
-        },Math.floor(Math.random() * 1000) + 1000) 
+            botMove(copyImages)
+        },100)
     }
 
     return (
@@ -54,35 +53,36 @@ export const PlayBtn = (props) => {
 /**
  * Метод хода бота, если это разрешено*/
 const botMove = (copyImages) => {
-    console.log("bot: " + bot + " countPressed: " + countPressed + " move: " + !move + "  win: " + !win )
-    if(countPressed !== 9){
-        console.log('ХОД БОТА' + win.toString())
+    if(bot && countPressed !== 9 && !move && !win){
         bestMove = bestScore(copyImages, 3, 3)
         copyImages[bestMove] = 2
-        console.log("ХОД БОТА ПОЗИЦИЯ НАХУЙ: " + bestMove);
         dispatch(changeImage(bestMove))
         dispatch(winGame())
     }
 }
 
 const bestScore = (board, rowLength, columnLength) => {
-    let bestScore = -Infinity
+    let score = -Infinity
     let bestMove = Math.floor(Math.random() * (8));
     
     for (let i = 0; i < rowLength*columnLength; i++){
-        if (board[i] === null){
+        if (board[i] === undefined){
             board[i] = 2
-            let score = minimax(board, 0, false, rowLength, columnLength)
+            let minmax = minimax(board, false, rowLength, columnLength)
             board[i] = null
-            if (score > bestScore){
-                bestScore = score
+            if (minmax > bestScore){
+                score = minmax
                 bestMove = i
             }
         }
     }
-    return bestMove
+    if(!pressed[bestMove])
+        return bestMove
+    else
+        return bestScore(board,rowLength,columnLength)
 }
-const minimax = (board, depth, isMaximazing, rowLength, columnLenght) => {
+
+const minimax = (board, isMaximazing, rowLength, columnLenght) => {
     let scores = {
         "X": 1,
         "O": -1,
@@ -96,10 +96,10 @@ const minimax = (board, depth, isMaximazing, rowLength, columnLenght) => {
     if (isMaximazing){
         let bestScore = -Infinity
         for (let i = 0; i < rowLength*columnLenght; i++){
-            if (board[i] === null){
+            if (board[i] === undefined){
                 board[i] = 2
-                let score = minimax(board, depth + 1, false, rowLength, columnLenght)
-                board[i] = null
+                let score = minimax(board,false, rowLength, columnLenght)
+                board[i] = undefined
                 if (score > bestScore){
                     bestScore = score
                 }
@@ -109,10 +109,10 @@ const minimax = (board, depth, isMaximazing, rowLength, columnLenght) => {
     } else {
         let bestScore = Infinity
         for (let i = 0; i < rowLength*columnLenght; i++){
-            if (board[i] === null){
+            if (board[i] === undefined){
                 board[i] = 3
-                let score = minimax(board, depth + 1, true, rowLength, columnLenght)
-                board[i] = null
+                let score = minimax(board, true, rowLength, columnLenght)
+                board[i] = undefined
                 if (score < bestScore){
                     bestScore = score
                 }

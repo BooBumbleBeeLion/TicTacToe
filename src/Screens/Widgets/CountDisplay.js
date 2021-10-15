@@ -6,11 +6,10 @@ import chatbot from "../../../assets/chatbot.png"
 /**
  * Компонент отображения игрового состояния
  *
- * @param props - содержит:
- * text- отображаемый текст;
- * player-слева или справа расположен игрок;
- * move-чей текущий ход;
- * bot-играем с ботом или человеком */
+ * @param {string} text- отображаемый текст;
+ * @param {string} player-слева или справа расположен игрок;
+ * @param {boolean} move-чей текущий ход;
+ * @param {boolean} bot-играем с ботом или человеком */
 export const CountDisplay = ({text, player, move, bot}) => {
 
     return (
