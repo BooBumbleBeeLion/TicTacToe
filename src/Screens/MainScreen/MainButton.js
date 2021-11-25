@@ -21,8 +21,8 @@ export const MainButton = (props) => {
 
 const styles = StyleSheet.create({
     btnChild: {
-        height: '13%',
-        width: 300,
+        height: 50,
+        width: 270,
         marginTop: '7.5%',
         justifyContent: "center",
         alignItems: 'center',

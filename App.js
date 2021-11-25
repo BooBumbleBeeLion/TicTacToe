@@ -6,6 +6,10 @@ import { GameScreen } from './src/Screens/GameScreen/GameScreen';
 import { TableScreen } from './src/Screens/TableScreen/TableScreen';
 import { LastGameScreen } from "./src/Screens/LastGameScreen/LastGameScreen";
 import { setBot } from "./src/store/reducers/GameSlice";
+import { MainAuthScreen } from "./src/Screens/AuthScreens/MainAuthScreen"
+import { LoginScreen } from "./src/Screens/AuthScreens/LoginScreen"
+import { RegisterScreen } from "./src/Screens/AuthScreens/RegisterScreen"
+
 /**
  * Основной компонент для отображения всех компонентов */
 export function App() {
@@ -33,6 +37,12 @@ export function App() {
                 return (<GameScreen/>)
             case 4:
                 return (<TableScreen/>)
+            case 5:
+                return (<MainAuthScreen />)
+            case 6:
+                return (<LoginScreen />)
+            case 7:
+                return (<RegisterScreen />)
             default:
                 return (<MainScreen/>)
         }

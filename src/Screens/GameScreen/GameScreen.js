@@ -26,10 +26,6 @@ export const GameScreen = (props) => {
     const goFinish = GameData.getGoFinishGame()
     dispatch(setGame(goFinish))
 
-    BackHandler.addEventListener("hardwareBackPress", () => {
-        dispatch(setScreen(0))
-        return true
-    })
     return (
         <View style={styles.container}>
             <BackBtnTop/>

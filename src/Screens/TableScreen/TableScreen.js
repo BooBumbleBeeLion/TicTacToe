@@ -19,10 +19,6 @@ export const TableScreen = (props) => {
     let [gameData,setGameData] = useState(out)
     let [prev, setPrev] = useState(null)
 
-    BackHandler.addEventListener("hardwareBackPress", () => {
-        dispatch(setScreen(0))
-        return true
-    })
     return (
         <View style={ styles.container }>
             <BackBtnTop/>

@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, View, Image, TouchableOpacity,Text } from "react-native";
+import { StyleSheet, View, Image, TouchableOpacity, Text, BackHandler } from "react-native";
 import { setScreen } from "../../store/reducers/ScreenSlice";
 import { useDispatch } from "react-redux";
 import back from "../../../assets/back.png"
@@ -8,6 +8,11 @@ import back from "../../../assets/back.png"
 export const BackBtnTop = (props) => {
 
     const dispatch  = useDispatch();
+
+    BackHandler.addEventListener("hardwareBackPress", () => {
+        dispatch(setScreen(0))
+        return true
+    })
 
     return (
         <View style={styles.mainView}>

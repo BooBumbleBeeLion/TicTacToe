@@ -28,10 +28,6 @@ export const LastGameScreen = (props) => {
             rightState = lastGame.rightState
         }else alert("Вы еще не сыграли ни одной игры!")
     }
-    BackHandler.addEventListener("hardwareBackPress", () => {
-        dispatch(setScreen(0))
-        return true
-    })
 
     return (
         <View style={styles.container}>

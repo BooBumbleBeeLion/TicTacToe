@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, View, Image, BackHandler, Alert } from "react-native";
+import { StyleSheet, View, Image, BackHandler, Alert, AsyncStorage } from "react-native";
 import { MainButton } from './MainButton';
 import { GameData } from "../../GameData";
 // Images
@@ -21,10 +21,18 @@ export const MainScreen = (props) => {
         return true
     })
 
+    const getUserData = async () => {
+        const userName = await AsyncStorage.getItem('userName');
+        const userName = await AsyncStorage.getItem('userName');
+    }
+
     return (
         <View style={ styles.navBar }>
-            <Image style={ styles.navImage } source={icon}/>
+            <View>
+                <Image style={ styles.navImage } source={icon}/>
+            </View>
             <View style={ styles.mainBtns}>
+                <MainButton title={'Авторизация'} id={5}/>
                 <MainButton title={'Последняя игра'} id={1}/>
                 <MainButton title={'Одиночная игра'} id={2}/>
                 <MainButton title={'Игра на двоих'} id={3}/>
@@ -36,15 +44,16 @@ export const MainScreen = (props) => {
 
 const styles = StyleSheet.create({
     navBar: {
-        marginTop: '20%',
+        flex: 1,
+        marginTop: '6%',
         alignItems: 'center',
+        justifyContent: 'space-around'
     },
     navImage: {
         height: 256,
         width: 256,
     },
     mainBtns:{
-        marginTop: '10%',
         flexDirection: 'column',
     },
 })
