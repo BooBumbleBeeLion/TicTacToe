@@ -18,6 +18,8 @@ export const MainScreen = (props) => {
         !GameData.isAuth ? dispatch(setAuth(false)) : 0
     },10)
 
+    GameData.loadUserGames("ihcXzehAjHOtdbx5blMsA8AD0p3hl6mXmhBEKXZttcI")
+
     BackHandler.addEventListener("hardwareBackPress", () => {
         Alert.alert(
             "Вы куда?",

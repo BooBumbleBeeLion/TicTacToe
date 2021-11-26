@@ -1,7 +1,5 @@
 import React from "react";
-import { AsyncStorage } from "react-native";
-import {useDispatch} from "react-redux";
-import {setAuth} from "./store/reducers/ScreenSlice";
+import {Alert, AsyncStorage, ToastAndroid } from "react-native";
 /**
  * Класс для работы с AsyncStorage
  * @description
@@ -15,7 +13,10 @@ export class GameData {
 
     static isAuth = true
     static userName = ""
-    static userToken = ""
+    static userToken = "ihcXzehAjHOtdbx5blMsA8AD0p3hl6mXmhBEKXZttcI" //TODO: ПОСЛЕ ТЕСТОВ УБРАТЬ ТОКЕН
+    static userGames = []
+
+    static serverMessage = ""
 
     /**
      * Метод для передачи конкретной партии
@@ -46,25 +47,41 @@ export class GameData {
      * @param {string} userToken - Токен пользователя*/
     static async saveUser(userName, userToken){
         try{
+            await GameData.clearGameData();
             await AsyncStorage.setItem(`UserName`,userName)
             await AsyncStorage.setItem(`UserToken`,userToken)
             await AsyncStorage.setItem(`isAuth`,"true")
             this.userName = userName
             this.userToken = userToken
+            this.isAuth = true
         } catch(error){
-            alert("Не удалось сохранить данные о пользователе")
+            ToastAndroid.show("Не удалось сохранить данные о пользователе", ToastAndroid.LONG)
         }
     }
+    /**
+     * Асинхронный метод для загрузки данных о пользователе из памяти. */
     static async loadUser(){
-        console.log("loadUser")
         try{
             if((await AsyncStorage.getItem("isAuth")) === "true") {
+
                 this.userName = await AsyncStorage.getItem("UserName")
                 this.userToken = await AsyncStorage.getItem("UserToken")
             } else
-                this.isAuth = false
+                this.isAuth = true // TODO: ИЗМЕНИТЬ НА false для прода
         } catch(error){
-            alert("Не удалось загрузить данные о пользователе")
+            ToastAndroid.show("Не удалось загрузить данные о пользователе", ToastAndroid.LONG)
+        }
+    }
+    /**
+     * Асинхронный метод для выхода из текущей учетной записи. */
+    static async logoutUser(){
+        try{
+            await GameData.clearGameData();
+            this.userName = undefined
+            this.userToken = undefined
+            this.isAuth = false
+        } catch(error){
+            ToastAndroid.show("Не удалось выйти из учетной записи", ToastAndroid.LONG)
         }
     }
     /**
@@ -77,8 +94,27 @@ export class GameData {
             await AsyncStorage.setItem(`SaveGameState_${this.id++}`,JSON.stringify(this.gameData))
             console.log(JSON.stringify(this.gameData))
 
-        } catch (error) {
-            alert("Не удалось сохранить игру")
+            if(this.isAuth){
+                let request = 'http://mrjaxi-tictactoe.ml/gameMethod.saveGameData?' +
+                    'bot=' + gData.bot +
+                    '&winner=' + gData.winner +
+                    '&leftState=' + gData.leftState +
+                    '&rightState=' + gData.rightState +
+                    '&imagesID=' + JSON.stringify(gData.imagesId) +
+                    '&date=' + gData.date +
+                    '&token=' + this.userToken
+                await fetch(request)
+                    .then(response => response.json())
+                    .then(json => this.serverMessage = json)
+
+                if (this.serverMessage.hasOwnProperty("error"))
+                    ToastAndroid.show(this.serverMessage["error"], ToastAndroid.SHORT);
+                if(!this.serverMessage.hasOwnProperty("response"))
+                    ToastAndroid.show("Не удалось сохранить игру в облако", ToastAndroid.SHORT);
+            }
+
+        } catch (e) {
+            ToastAndroid.show('Ошибка: ' + e.name, ToastAndroid.LONG);
         }
     }
     /**
@@ -96,7 +132,30 @@ export class GameData {
 
             this.id = id
         } catch (error) {
-            alert("Не удалось загрузить результаты игр")
+            ToastAndroid.show("Не удалось загрузить результаты игр", ToastAndroid.LONG)
+        }
+    }
+    /**
+     * Метод для загрузки всех сохраненных партий
+     * @param {string} userToken - Токен пользователя
+     * @description Помещает все партии в массив result, также калибрует id */
+    static async loadUserGames(userToken) {
+        try {
+            let request = 'http://mrjaxi-tictactoe.ml/gameMethod.getGamesByToken?' +
+                'token=' + userToken
+            await fetch(request)
+                .then(response => response.json())
+                .then(json => this.serverMessage = json)
+
+            if (this.serverMessage.hasOwnProperty("error"))
+                ToastAndroid.show(this.serverMessage["error"], ToastAndroid.SHORT);
+            else if(this.serverMessage.hasOwnProperty("response")){
+                console.log("USERGAMES::"+JSON.stringify(this.serverMessage["response"])) //TODO: ПОЛУчаю уже игры по токену, осталось сериализовать и распихать его в массив result
+            } else
+                ToastAndroid.show("Не удалось загрузить игры из облака", ToastAndroid.SHORT);
+
+        } catch (error) {
+            ToastAndroid.show("Не удалось загрузить игры пользователя", ToastAndroid.LONG)
         }
     }
     /**
@@ -113,7 +172,7 @@ export class GameData {
 
 
         } catch (error) {
-            alert("Не удалось сохранить игру")
+            ToastAndroid.show("Не удалось сохранить состояние игры", ToastAndroid.LONG)
         }
     }
     /**
@@ -129,7 +188,7 @@ export class GameData {
 
             console.log("LOAD: " + this.goFinish)
         } catch (error) {
-            alert("Не удалось загрузить данные последней игры")
+            ToastAndroid.show("Не удалось загрузить данные последней игры", ToastAndroid.LONG)
         }
     }
     /**
@@ -137,9 +196,9 @@ export class GameData {
     static async clearGameData(){
         try {
             await AsyncStorage.clear()
-            alert("Кэш игры очишен")
+            ToastAndroid.show("Кэш игры очишен", ToastAndroid.LONG)
         } catch (error) {
-            alert("Не удалось очистить кэш" + error.message)
+            ToastAndroid.show("Не удалось очистить кэш", ToastAndroid.LONG)
         }
     }
 }
