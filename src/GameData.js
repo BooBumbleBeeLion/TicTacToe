@@ -1,16 +1,22 @@
 import React from "react";
 import { AsyncStorage } from "react-native";
+import {useDispatch} from "react-redux";
+import {setAuth} from "./store/reducers/ScreenSlice";
 /**
  * Класс для работы с AsyncStorage
  * @description
  * Имеет статические поля и методы для работы с стором*/
 export class GameData {
-
     static goFinish
     static result = []
     static checkResponse
     static id = 0
     static gameData = {}
+
+    static isAuth = true
+    static userName = ""
+    static userToken = ""
+
     /**
      * Метод для передачи конкретной партии
      * @param {number} id-номер партии
@@ -33,6 +39,33 @@ export class GameData {
      * @return {object} Последнее состояние игры */
     static getGoFinishGame(){
         return this.goFinish
+    }
+    /**
+     * Асинхронный метод для задания информации о пользователе.
+     * @param {string} userName - Имя пользователя
+     * @param {string} userToken - Токен пользователя*/
+    static async saveUser(userName, userToken){
+        try{
+            await AsyncStorage.setItem(`UserName`,userName)
+            await AsyncStorage.setItem(`UserToken`,userToken)
+            await AsyncStorage.setItem(`isAuth`,"true")
+            this.userName = userName
+            this.userToken = userToken
+        } catch(error){
+            alert("Не удалось сохранить данные о пользователе")
+        }
+    }
+    static async loadUser(){
+        console.log("loadUser")
+        try{
+            if((await AsyncStorage.getItem("isAuth")) === "true") {
+                this.userName = await AsyncStorage.getItem("UserName")
+                this.userToken = await AsyncStorage.getItem("UserToken")
+            } else
+                this.isAuth = false
+        } catch(error){
+            alert("Не удалось загрузить данные о пользователе")
+        }
     }
     /**
      * Асинхронный метод для сохранения результатов партии

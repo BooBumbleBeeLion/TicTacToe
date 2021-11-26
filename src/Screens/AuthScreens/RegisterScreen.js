@@ -1,11 +1,18 @@
 import React from "react";
-import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, StatusBar } from "react-native";
+import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity } from "react-native";
+import { BackBtnTop } from "../Widgets/BackBtnTop"
 import icon from '../../../assets/icon.png';
-import { MainButton } from "../MainScreen/MainButton";
-import { BackBtnTop } from "../Widgets/BackBtnTop";
+import {useDispatch} from "react-redux";
+import {setAuth} from "../../store/reducers/ScreenSlice";
 
 
 export const RegisterScreen = (props) => {
+    const dispatch  = useDispatch();
+
+    /**
+     * dispatch(setAuth(true))
+     * */
+
     return (
         <View style={{
             justifyContent: 'center',

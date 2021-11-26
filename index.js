@@ -10,6 +10,7 @@ class index extends Component {
 
     constructor(){
         super()
+        GameData.loadUser()
         GameData.loadGoFinishGame()
         // GameData.clearGameData()
         // GameData.saveGoFinishGame('string')

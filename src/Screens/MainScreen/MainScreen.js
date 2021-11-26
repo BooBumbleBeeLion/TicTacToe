@@ -1,13 +1,22 @@
 import React from "react";
-import { StyleSheet, View, Image, BackHandler, Alert, AsyncStorage } from "react-native";
+import { StyleSheet, View, Image, BackHandler, Alert } from "react-native";
 import { MainButton } from './MainButton';
 import { GameData } from "../../GameData";
 // Images
 import icon from '../../../assets/icon.png';
+import {AuthBtnTop} from "../Widgets/AuthBtnTop";
+import {useDispatch, useSelector} from "react-redux";
+import {setAuth} from "../../store/reducers/ScreenSlice";
 /**
  * Компонент отрисовки начального экрана с навигацией по другим экранам */
 export const MainScreen = (props) => {
     GameData.loadGameData()
+    const isAuth = useSelector(state => state.ScreenSlice.isAuth)
+    const dispatch  = useDispatch();
+    setTimeout(function(){
+        // Если пользователь не аутентифицирован добавляю кнопку войти на экран через диспатч
+        !GameData.isAuth ? dispatch(setAuth(false)) : 0
+    },10)
 
     BackHandler.addEventListener("hardwareBackPress", () => {
         Alert.alert(
@@ -21,18 +30,11 @@ export const MainScreen = (props) => {
         return true
     })
 
-    const getUserData = async () => {
-        const userName = await AsyncStorage.getItem('userName');
-        const userName = await AsyncStorage.getItem('userName');
-    }
-
     return (
-        <View style={ styles.navBar }>
-            <View>
-                <Image style={ styles.navImage } source={icon}/>
-            </View>
+        <View style={ styles.container }>
+            { !isAuth ? (<AuthBtnTop title={'Войти'} id={5}/>) : null }
+            <Image style={ styles.navImage } source={icon}/>
             <View style={ styles.mainBtns}>
-                <MainButton title={'Авторизация'} id={5}/>
                 <MainButton title={'Последняя игра'} id={1}/>
                 <MainButton title={'Одиночная игра'} id={2}/>
                 <MainButton title={'Игра на двоих'} id={3}/>
@@ -43,7 +45,7 @@ export const MainScreen = (props) => {
 }
 
 const styles = StyleSheet.create({
-    navBar: {
+    container: {
         flex: 1,
         marginTop: '6%',
         alignItems: 'center',
