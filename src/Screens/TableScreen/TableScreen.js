@@ -10,7 +10,7 @@ import { PreviewField } from "../Widgets/PreviewField";
  * Компонент отображения истории игр */
 export const TableScreen = (props) => {
     const dispatch = useDispatch();
-    let result = GameData.result
+    let result = !GameData.isAuth ? GameData.games : GameData.userGames
     let out = []
     // Инвертирую массив, сначала отображаются последние игры
     for(let i = 0,y=result.length-1; i < result.length; i++,y--) {

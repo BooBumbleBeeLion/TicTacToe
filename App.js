@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useDispatch, useSelector } from "react-redux";
 import { MainScreen } from './src/Screens/MainScreen/MainScreen';
@@ -9,18 +9,36 @@ import { setBot } from "./src/store/reducers/GameSlice";
 import { MainAuthScreen } from "./src/Screens/AuthScreens/MainAuthScreen"
 import { LoginScreen } from "./src/Screens/AuthScreens/LoginScreen"
 import { RegisterScreen } from "./src/Screens/AuthScreens/RegisterScreen"
+import {GameData} from "./src/GameData";
+import {setAuth} from "./src/store/reducers/ScreenSlice";
 
 /**
  * Основной компонент для отображения всех компонентов */
 export function App() {
     const dispatch  = useDispatch();
     const screenId = useSelector(state => state.ScreenSlice.screenId)
+    const [firstRender,setFirstRender] = useState(true)
+
+    if(firstRender){
+        firstLoad().then()
+        setFirstRender(false)
+    }
 
     return (
         <View style={styles.background}>
             {asScreen(screenId)}
         </View>
     );
+    async function firstLoad() {
+        // await GameData.clearGameData()
+        // await GameData.saveUser("bbl2", "bbl2")
+        await GameData.loadUser()
+        // console.log("!GameData.isAuth::"+!GameData.isAuth)
+        !GameData.isAuth ? dispatch(setAuth(false)) : await GameData.loadUserGames(GameData.userToken)
+
+        // console.log(GameData.isAuth + "|" + GameData.userToken)
+        await GameData.loadGoFinishGame()
+    }
     /**
      * Возвращает выбранный экран
      * @param {number} screenId - ID нужного нам экрана

@@ -10,15 +10,11 @@ import {setAuth} from "../../store/reducers/ScreenSlice";
 /**
  * Компонент отрисовки начального экрана с навигацией по другим экранам */
 export const MainScreen = (props) => {
-    GameData.loadGameData()
     const isAuth = useSelector(state => state.ScreenSlice.isAuth)
     const dispatch  = useDispatch();
-    setTimeout(function(){
-        // Если пользователь не аутентифицирован добавляю кнопку войти на экран через диспатч
-        !GameData.isAuth ? dispatch(setAuth(false)) : 0
-    },10)
+    GameData.loadGameData()
+    console.log("!IsAUTH::"+!isAuth)
 
-    GameData.loadUserGames("ihcXzehAjHOtdbx5blMsA8AD0p3hl6mXmhBEKXZttcI")
 
     BackHandler.addEventListener("hardwareBackPress", () => {
         Alert.alert(

@@ -9,9 +9,10 @@ import {setAuth} from "../../store/reducers/ScreenSlice";
 export const RegisterScreen = (props) => {
     const dispatch  = useDispatch();
 
-    /**
-     * dispatch(setAuth(true))
-     * */
+    /**  Когда аутентифицируешь пользователя пропиши это
+     GameData.saveUser("userName", "userPassword").then()
+     dispatch(setAuth(true))
+     */
 
     return (
         <View style={{

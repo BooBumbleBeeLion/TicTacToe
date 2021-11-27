@@ -4,14 +4,16 @@ import { BackBtnTop } from "../Widgets/BackBtnTop"
 import icon from '../../../assets/icon.png';
 import {useDispatch} from "react-redux";
 import {setAuth} from "../../store/reducers/ScreenSlice";
+import {GameData} from "../../GameData";
 
 
 export const LoginScreen = () => {
     const dispatch  = useDispatch();
 
     /**  Когда аутентифицируешь пользователя пропиши это
-     * или false когда выход пользователя
-     * dispatch(setAuth(true)) */
+     GameData.saveUser("userName", "userPassword").then()
+     dispatch(setAuth(true))
+     */
     return (
         <View style={{
             justifyContent: 'center',

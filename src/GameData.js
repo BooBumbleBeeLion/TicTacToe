@@ -6,14 +6,15 @@ import {Alert, AsyncStorage, ToastAndroid } from "react-native";
  * Имеет статические поля и методы для работы с стором*/
 export class GameData {
     static goFinish
-    static result = []
+    static games = []
     static checkResponse
     static id = 0
     static gameData = {}
 
     static isAuth = true
     static userName = ""
-    static userToken = "ihcXzehAjHOtdbx5blMsA8AD0p3hl6mXmhBEKXZttcI" //TODO: ПОСЛЕ ТЕСТОВ УБРАТЬ ТОКЕН
+    static userPassword = ""
+    static userToken = ""
     static userGames = []
 
     static serverMessage = ""
@@ -23,15 +24,15 @@ export class GameData {
      * @param {number} id-номер партии
      * @return {object} Конкретная партия*/
     static getGame(id){
-        return this.result[id];
+        return this.games[id];
     }
     /**
      * Метод для передачи последней сыгранной партии
      * @return {object} Последняя партия
      * @description При отстутствии игр возвращает null*/
     static getLastGame(){
-        if(this.result.length)
-            return this.result[this.result.length - 1]
+        if(this.games.length)
+            return this.games[this.games.length - 1]
         else
             return null
     }
@@ -44,17 +45,19 @@ export class GameData {
     /**
      * Асинхронный метод для задания информации о пользователе.
      * @param {string} userName - Имя пользователя
-     * @param {string} userToken - Токен пользователя*/
-    static async saveUser(userName, userToken){
+     * @param {string} userPassword - Пароль пользователя */
+    static async saveUser(userName,userPassword){
         try{
             await GameData.clearGameData();
             await AsyncStorage.setItem(`UserName`,userName)
-            await AsyncStorage.setItem(`UserToken`,userToken)
+            await AsyncStorage.setItem(`UserPassword`,userPassword)
             await AsyncStorage.setItem(`isAuth`,"true")
             this.userName = userName
-            this.userToken = userToken
+            this.userPassword = userPassword
             this.isAuth = true
+            await this.loadUser(this.userName,this.userPassword)
         } catch(error){
+            await this.logoutUser()
             ToastAndroid.show("Не удалось сохранить данные о пользователе", ToastAndroid.LONG)
         }
     }
@@ -62,13 +65,35 @@ export class GameData {
      * Асинхронный метод для загрузки данных о пользователе из памяти. */
     static async loadUser(){
         try{
+            let serverMessage = ""
             if((await AsyncStorage.getItem("isAuth")) === "true") {
-
                 this.userName = await AsyncStorage.getItem("UserName")
-                this.userToken = await AsyncStorage.getItem("UserToken")
+                this.userPassword = await AsyncStorage.getItem("UserPassword")
+
+                let request = 'http://mrjaxi-tictactoe.ml/login?' +
+                    'userLogin=' + this.userName +
+                    '&userPassword=' + this.userPassword
+                await fetch(request)
+                    .then(response => response.json())
+                    .then(json => serverMessage = json)
+
+                if (serverMessage.hasOwnProperty("error")) {
+                    await this.logoutUser()
+                    ToastAndroid.show(serverMessage["error"], ToastAndroid.LONG)
+                }
+                else if(!serverMessage.hasOwnProperty("response")) {
+                    await this.logoutUser()
+                    ToastAndroid.show("Не удалось сохранить войти в аккаунт", ToastAndroid.LONG)
+                }
+                else {
+                    this.userToken = serverMessage.response.token
+                    await AsyncStorage.setItem(`UserToken`, this.userToken)
+                    console.log(this.userToken);
+                }
             } else
-                this.isAuth = true // TODO: ИЗМЕНИТЬ НА false для прода
+                this.isAuth = false
         } catch(error){
+            await this.logoutUser()
             ToastAndroid.show("Не удалось загрузить данные о пользователе", ToastAndroid.LONG)
         }
     }
@@ -77,8 +102,9 @@ export class GameData {
     static async logoutUser(){
         try{
             await GameData.clearGameData();
-            this.userName = undefined
-            this.userToken = undefined
+            this.userName = ""
+            this.userPassword = ""
+            this.userToken = ""
             this.isAuth = false
         } catch(error){
             ToastAndroid.show("Не удалось выйти из учетной записи", ToastAndroid.LONG)
@@ -89,28 +115,30 @@ export class GameData {
      * @param {object} gData - сформированный литерал объект с данными партии*/
     static async saveGameData(gData) {
         try {
-            this.gameData = gData
-            this.gameData.id = this.id
-            await AsyncStorage.setItem(`SaveGameState_${this.id++}`,JSON.stringify(this.gameData))
-            console.log(JSON.stringify(this.gameData))
-
             if(this.isAuth){
+                let serverMessage = ""
                 let request = 'http://mrjaxi-tictactoe.ml/gameMethod.saveGameData?' +
                     'bot=' + gData.bot +
                     '&winner=' + gData.winner +
                     '&leftState=' + gData.leftState +
                     '&rightState=' + gData.rightState +
-                    '&imagesID=' + JSON.stringify(gData.imagesId) +
+                    '&imagesID=' + gData.imagesId +
                     '&date=' + gData.date +
                     '&token=' + this.userToken
                 await fetch(request)
                     .then(response => response.json())
-                    .then(json => this.serverMessage = json)
+                    .then(json => serverMessage = json)
 
-                if (this.serverMessage.hasOwnProperty("error"))
-                    ToastAndroid.show(this.serverMessage["error"], ToastAndroid.SHORT);
-                if(!this.serverMessage.hasOwnProperty("response"))
-                    ToastAndroid.show("Не удалось сохранить игру в облако", ToastAndroid.SHORT);
+                if (serverMessage.hasOwnProperty("error"))
+                    ToastAndroid.show(serverMessage["error"], ToastAndroid.LONG);
+                else if(!serverMessage.hasOwnProperty("response"))
+                    ToastAndroid.show("Не удалось сохранить игру в облако", ToastAndroid.LONG);
+            }
+            else {
+                this.gameData = gData
+                this.gameData.id = this.id
+                await AsyncStorage.setItem(`SaveGameState_${this.id++}`, JSON.stringify(this.gameData))
+                console.log(JSON.stringify(this.gameData))
             }
 
         } catch (e) {
@@ -119,14 +147,13 @@ export class GameData {
     }
     /**
      * Асинхронный метод для загрузки всех сохраненных партий
-     * @description Помещает все партии в массив result, также калибрует id */
+     * @description Помещает все партии в массив games, также калибрует id */
     static async loadGameData() {
-        console.log("loadGameData")
         try {
             let id = 0
-            this.result = []
+            this.games = []
             while ((this.checkResponse =  await AsyncStorage.getItem(`SaveGameState_${id}`)) !== null) {
-                this.result.push(JSON.parse(this.checkResponse));
+                this.games.push(JSON.parse(this.checkResponse));
                 id++
             }
 
@@ -137,22 +164,26 @@ export class GameData {
     }
     /**
      * Метод для загрузки всех сохраненных партий
-     * @param {string} userToken - Токен пользователя
-     * @description Помещает все партии в массив result, также калибрует id */
-    static async loadUserGames(userToken) {
+     * @description Загружает и помещает все партии пользователя в массив userGames */
+    static async loadUserGames() {
         try {
+            let serverMessage = ""
             let request = 'http://mrjaxi-tictactoe.ml/gameMethod.getGamesByToken?' +
-                'token=' + userToken
+                'token=' + this.userToken
             await fetch(request)
                 .then(response => response.json())
-                .then(json => this.serverMessage = json)
+                .then(json => serverMessage = json)
 
-            if (this.serverMessage.hasOwnProperty("error"))
-                ToastAndroid.show(this.serverMessage["error"], ToastAndroid.SHORT);
-            else if(this.serverMessage.hasOwnProperty("response")){
-                console.log("USERGAMES::"+JSON.stringify(this.serverMessage["response"])) //TODO: ПОЛУчаю уже игры по токену, осталось сериализовать и распихать его в массив result
-            } else
-                ToastAndroid.show("Не удалось загрузить игры из облака", ToastAndroid.SHORT);
+            if (serverMessage.hasOwnProperty("error"))
+                ToastAndroid.show(serverMessage["error"], ToastAndroid.LONG);
+            else if(!serverMessage.hasOwnProperty("response"))
+                ToastAndroid.show("Не удалось загрузить игры из облака", ToastAndroid.LONG);
+            else {
+                let games = serverMessage["response"]["response"]
+                let game = games[0]
+                console.log(serverMessage)
+                console.log(game?.imagesId) // TODO: Доделать парсинг игр по токену(проблема с imagesId в api)
+            }
 
         } catch (error) {
             ToastAndroid.show("Не удалось загрузить игры пользователя", ToastAndroid.LONG)
@@ -164,7 +195,6 @@ export class GameData {
      * @description Строкое значение обозначает дефолтное состояние игры*/
     static async saveGoFinishGame(gData){
         try {
-            console.log("saveGoFinishGame")
             if(typeof gData === 'string')
                 await AsyncStorage.setItem(`GoFinish`, 'string')
             else
@@ -179,14 +209,13 @@ export class GameData {
      * Асинхронный метод для загрузки последнего состояния игры перед выходом
      * @description Помещает последнее состояние в переменную goFinish */
     static async loadGoFinishGame(){
-        console.log("LOADGOFINISH")
         try {
             this.checkResponse =  await AsyncStorage.getItem(`GoFinish`)
 
             this.goFinish = this.checkResponse === 'string'   ? this.checkResponse
                                                             : JSON.parse(this.checkResponse)
 
-            console.log("LOAD: " + this.goFinish)
+            console.log("LOADGOFINISH: " + this.goFinish)
         } catch (error) {
             ToastAndroid.show("Не удалось загрузить данные последней игры", ToastAndroid.LONG)
         }
