@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, StatusBar } from 'react-native';
 import { useDispatch, useSelector } from "react-redux";
 import { MainScreen } from './src/Screens/MainScreen/MainScreen';
 import { GameScreen } from './src/Screens/GameScreen/GameScreen';
@@ -26,6 +26,7 @@ export function App() {
 
     return (
         <View style={styles.background}>
+            <StatusBar />
             {asScreen(screenId)}
         </View>
     );
