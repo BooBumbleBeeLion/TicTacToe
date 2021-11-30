@@ -9,14 +9,14 @@ import { PreviewField } from "../Widgets/PreviewField";
 /**
  * Компонент отображения истории игр */
 export const TableScreen = (props) => {
-    const dispatch = useDispatch();
-    let result = !GameData.isAuth ? GameData.games : GameData.userGames
+    let result = GameData.games
     let out = []
     // Инвертирую массив, сначала отображаются последние игры
     for(let i = 0,y=result.length-1; i < result.length; i++,y--) {
         out[i] = result[y]
     }
     let [gameData,setGameData] = useState(out)
+    let [refresh,setRefresh] = useState(false)
     let [prev, setPrev] = useState(null)
 
     return (
@@ -25,10 +25,12 @@ export const TableScreen = (props) => {
             <FlatList
                 style={styles.flatList}
                 data={gameData}
+                extraData={refresh}
                 renderItem={({item}) => {
                     return(
                     <View key={item.id} style={styles.prevContainer}>
-                        <TouchableOpacity onPress={() => prev !== item.id ? setPrev(item.id) : setPrev(null)}>
+                        <TouchableOpacity onPress={() => { prev !== item.id ? setPrev(item.id) : setPrev(null)
+                            setRefresh(!refresh)}}>
                             <PreviewPlayItem item={item}/>
                         </TouchableOpacity>
                         {(prev === item.id &&

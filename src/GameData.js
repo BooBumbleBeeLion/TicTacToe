@@ -1,5 +1,5 @@
 import React from "react";
-import {Alert, AsyncStorage, ToastAndroid } from "react-native";
+import { AsyncStorage, ToastAndroid } from "react-native";
 /**
  * Класс для работы с AsyncStorage
  * @description
@@ -15,9 +15,6 @@ export class GameData {
     static userName = ""
     static userPassword = ""
     static userToken = ""
-    static userGames = []
-
-    static serverMessage = ""
 
     /**
      * Метод для передачи конкретной партии
@@ -106,6 +103,7 @@ export class GameData {
             this.userPassword = ""
             this.userToken = ""
             this.isAuth = false
+            this.games = []
         } catch(error){
             ToastAndroid.show("Не удалось выйти из учетной записи", ToastAndroid.LONG)
         }
@@ -125,6 +123,7 @@ export class GameData {
                     '&imagesID=' + gData.imagesId +
                     '&date=' + gData.date +
                     '&token=' + this.userToken
+                console.log(request)
                 await fetch(request)
                     .then(response => response.json())
                     .then(json => serverMessage = json)
@@ -149,6 +148,7 @@ export class GameData {
      * Асинхронный метод для загрузки всех сохраненных партий
      * @description Помещает все партии в массив games, также калибрует id */
     static async loadGameData() {
+        console.log("loadGameData")
         try {
             let id = 0
             this.games = []
@@ -163,13 +163,15 @@ export class GameData {
         }
     }
     /**
-     * Метод для загрузки всех сохраненных партий
-     * @description Загружает и помещает все партии пользователя в массив userGames */
+     * Асинхронный метод для загрузки всех партий пользователя на сервере
+     * @description Загружает и помещает все партии пользователя в массив games */
     static async loadUserGames() {
+        console.log("loadUserGames")
         try {
             let serverMessage = ""
             let request = 'http://mrjaxi-tictactoe.ml/gameMethod.getGamesByToken?' +
                 'token=' + this.userToken
+            console.log(request)
             await fetch(request)
                 .then(response => response.json())
                 .then(json => serverMessage = json)
@@ -179,10 +181,18 @@ export class GameData {
             else if(!serverMessage.hasOwnProperty("response"))
                 ToastAndroid.show("Не удалось загрузить игры из облака", ToastAndroid.LONG);
             else {
-                let games = serverMessage["response"]["response"]
-                let game = games[0]
+                this.id = 0
+                this.games = []
                 console.log(serverMessage)
-                console.log(game?.imagesId) // TODO: Доделать парсинг игр по токену(проблема с imagesId в api)
+                let games = serverMessage["response"]["response"]
+                for(let i = 0; i < games.length; i++) {
+                    let game = games[i]
+                    game.id = this.id++
+                    for (let i = 0; i < game.imagesId.length; i++) {
+                        game.imagesId[i] = +game.imagesId[i];
+                    }
+                    this.games.push(game)
+                }
             }
 
         } catch (error) {

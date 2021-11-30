@@ -1,9 +1,18 @@
 import React, { useState } from "react"
-import { View, Image, TouchableOpacity, StyleSheet, TextInput, Text, KeyboardAvoidingView } from "react-native"
+import {
+    View,
+    Image,
+    TouchableOpacity,
+    StyleSheet,
+    TextInput,
+    Text,
+    KeyboardAvoidingView,
+    ToastAndroid
+} from "react-native"
 import { BackBtnTop } from "../Widgets/BackBtnTop"
 import icon from '../../../assets/icon.png';
 import {useDispatch} from "react-redux";
-import {setAuth} from "../../store/reducers/ScreenSlice";
+import {setAuth, setScreen} from "../../store/reducers/ScreenSlice";
 import {GameData} from "../../GameData";
 
 
@@ -13,21 +22,26 @@ export const LoginScreen = () => {
     const [login, setLogin] = useState("");
     const [password, setPassword] = useState("");
 
-    const [serverResponse, setServerResponse] = useState(Object);
+    const [responseText, setResponseText] = useState(Object);
 
-    const serverRequest = async () => {
-        await fetch("http://mrjaxi-tictactoe.ml/login?userLogin=" + login + "&userPassword=" + password)
+    function serverRequest() {
+        let request ="http://mrjaxi-tictactoe.ml/login?userLogin=" + login + "&userPassword=" + password
+        fetch(request)
             .then(response => response.json())
-            .then(json => setServerResponse(json));
-        
-        console.log(serverResponse['response']);
-
-        if (serverResponse.hasOwnProperty('error') === false){
-            GameData.saveUser(
-                serverResponse['response']['userName'],
-                serverResponse['response']['userPassword']).then()
-            dispatch(setAuth(true))
-        }
+            .then(json => {
+                let serverResponse = json
+                console.log(serverResponse)
+                if (serverResponse.hasOwnProperty('response')){
+                    ToastAndroid.show("Вы успешно вошли в аккаунт!", ToastAndroid.LONG)
+                    dispatch(setScreen(0))
+                    dispatch(setAuth(true))
+                    GameData.saveUser(
+                        serverResponse['response']['userName'],
+                        serverResponse['response']['userPassword'])
+                } else if(serverResponse.hasOwnProperty('error')) {
+                    setResponseText(serverResponse)
+                }
+            });
     };
 
     return (
@@ -36,8 +50,7 @@ export const LoginScreen = () => {
                 justifyContent: 'center',
                 alignItems: 'center',
             }}
-            behavior="padding"
-        >
+            behavior="padding">
             <View style={ styles.navBar }>
                 <View>
                     <Image style={ styles.navImage } source={icon}/>
@@ -50,7 +63,7 @@ export const LoginScreen = () => {
                         textAlign: "center",
                         marginBottom: '10%'
                     }}>
-                        { serverResponse.hasOwnProperty('error') && serverResponse['error'] }
+                        { responseText.hasOwnProperty('error') && responseText['error'] }
                     </Text>
                     <TextInput 
                         style={ styles.textInput }

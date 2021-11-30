@@ -1,18 +1,27 @@
 import React from "react";
-import { StyleSheet, View, Image, TouchableOpacity, Text, BackHandler } from "react-native";
-import { setScreen } from "../../store/reducers/ScreenSlice";
+import { StyleSheet, View, Image, TouchableOpacity, Text } from "react-native";
+import { setAuth, setScreen } from "../../store/reducers/ScreenSlice";
 import { useDispatch } from "react-redux";
+import { GameData } from "../../GameData";
 import login from "../../../assets/login.png";
 /**
  * Компонент отрисовки кнопки возвращения в главное меню */
 export const AuthBtnTop = (props) => {
 
     const dispatch  = useDispatch();
+    function onPress(){
+        if(props.title === "Войти"){
+            dispatch(setScreen(props.id))
+        } else {
+            GameData.logoutUser().then()
+            dispatch(setAuth(false))
+        }
+    }
 
     return (
         <View style={styles.mainView}>
             <TouchableOpacity style={styles.btnBack}
-                              onPress={() => dispatch(setScreen(props.id))}>
+                              onPress={() => onPress() }>
                 <Image style={styles.image} source={login}/>
                 <Text style={styles.text}> {props.title} </Text>
             </TouchableOpacity>
@@ -40,7 +49,7 @@ const styles = StyleSheet.create({
         width: 35,
     },
     text: {
-        width: 50,
+        width: "50%",
         textAlign: 'center',
         textAlignVertical: 'center',
         color: '#000',

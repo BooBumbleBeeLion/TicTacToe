@@ -10,7 +10,7 @@ import circle from "../../../assets/circle.png";
  * @param {boolean} props last - отображать последнюю игру или нет*/
 export const PreviewField = (props) => {
     const rowLength = 3
-    const columnLenght = Array.from(Array(3).keys())
+    const columnLength = Array.from(Array(3).keys())
     let playButtons = []
     if(props.last) {
         let lastGame = GameData.getLastGame()
@@ -29,7 +29,7 @@ export const PreviewField = (props) => {
     function Preview() {
         let lastGame = GameData.getGame(props.id)
         if (lastGame !== null && lastGame !== undefined) {
-            for (let i = 0; i < rowLength*columnLenght.length; i++){
+            for (let i = 0; i < rowLength*columnLength.length; i++){
                 playButtons.push({
                     id: i,
                     image:   lastGame.imagesId[i]===1 ? krest :
@@ -42,7 +42,7 @@ export const PreviewField = (props) => {
     return (
         <View style={styles.gridView}>
             {
-                columnLenght.map((item) => (
+                columnLength.map((item) => (
                     <View key={ item*10 } style={ styles.rowView }>
                         {
                             playButtons.slice(item*rowLength, (1 + item)*rowLength).map(({id, image, size}) => (

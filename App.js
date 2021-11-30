@@ -26,16 +26,14 @@ export function App() {
 
     return (
         <View style={styles.background}>
-            <StatusBar />
             {asScreen(screenId)}
         </View>
-    );
+    )
     async function firstLoad() {
         // await GameData.clearGameData()
-        // await GameData.saveUser("bbl2", "bbl2")
         await GameData.loadUser()
         // console.log("!GameData.isAuth::"+!GameData.isAuth)
-        !GameData.isAuth ? dispatch(setAuth(false)) : await GameData.loadUserGames(GameData.userToken)
+        !GameData.isAuth ? dispatch(setAuth(false)) : await GameData.loadUserGames()
 
         // console.log(GameData.isAuth + "|" + GameData.userToken)
         await GameData.loadGoFinishGame()

@@ -11,9 +11,7 @@ import {setAuth} from "../../store/reducers/ScreenSlice";
  * Компонент отрисовки начального экрана с навигацией по другим экранам */
 export const MainScreen = (props) => {
     const isAuth = useSelector(state => state.ScreenSlice.isAuth)
-    const dispatch  = useDispatch();
-    GameData.loadGameData()
-    console.log("!IsAUTH::"+!isAuth)
+    GameData.isAuth ? GameData.loadUserGames() : GameData.loadGameData()
 
 
     BackHandler.addEventListener("hardwareBackPress", () => {
@@ -30,7 +28,7 @@ export const MainScreen = (props) => {
 
     return (
         <View style={ styles.container }>
-            { !isAuth ? (<AuthBtnTop title={'Войти'} id={5}/>) : null }
+            { !isAuth ? (<AuthBtnTop title={'Войти'} id={5}/>) : (<AuthBtnTop title={'Выйти'} id={5}/>) }
             <Image style={ styles.navImage } source={icon}/>
             <View style={ styles.mainBtns}>
                 <MainButton title={'Последняя игра'} id={1}/>
