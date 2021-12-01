@@ -1,9 +1,10 @@
 import React from "react";
-import { Image, StyleSheet, Text, View } from "react-native";
+import {Image, StyleSheet, Text, View, TouchableOpacity, ToastAndroid} from "react-native";
 
 import krest from "../../../assets/krest.png";
 import circle from "../../../assets/circle.png";
 import nothing from "../../../assets/nothing.png";
+import {GameData} from "../../GameData";
 
 /**
  * Компонент информации о сыгранной игре(x/o/ничья-режим-дата)
@@ -11,12 +12,11 @@ import nothing from "../../../assets/nothing.png";
  * @param {item} - содержит:
  * gameData[] - массив литерал объектов информации о партиях */
 export const PreviewPlayItem = ({ item }) => {
-
     return (
         <View key={item.id} style={styles.mainItemBody}>
             <View style={styles.endTypeGameBlock}>
                 <Image style={styles.image}
-                       source={item.winner ? krest : item.winner === false ? circle : nothing}/>
+                       source={item.leftState === "Drawn" ? nothing : item.winner ? krest : circle}/>
             </View>
             <View style={styles.textInfoBlock}>
                 <Text style={styles.text}>{item.bot ? 'Single Player' : 'Game for Two'}</Text>
@@ -29,12 +29,14 @@ export const PreviewPlayItem = ({ item }) => {
 const styles = StyleSheet.create({
     mainItemBody: {
         height:100,
-        width: 400,
+        width: 360,
         alignItems: 'center',
         flexDirection: 'row',
         backgroundColor: '#c4c4c4',
-        borderRadius: 15,
-        marginTop: 15
+        borderTopLeftRadius: 20,
+        borderBottomLeftRadius: 20,
+        borderTopRightRadius: 20,
+        marginTop: 30,
     },
     endTypeGameBlock: {
         height: '100%',
@@ -43,7 +45,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingLeft: 20,
         paddingRight: 20,
-        borderBottomLeftRadius: 10,
         borderTopLeftRadius: 10,
         backgroundColor: '#5C821A'
     },
@@ -54,9 +55,9 @@ const styles = StyleSheet.create({
         margin: 10,
     },
     textInfoBlock: {
-        width: '70%',
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        flexBasis: '75%'
     },
     text: {
         fontWeight: 'bold',

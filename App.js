@@ -26,6 +26,7 @@ export function App() {
 
     return (
         <View style={styles.background}>
+            <StatusBar />
             {asScreen(screenId)}
         </View>
     )

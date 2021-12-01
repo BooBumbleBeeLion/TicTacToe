@@ -42,7 +42,7 @@ export const LoginScreen = () => {
                     setResponseText(serverResponse)
                 }
             });
-    };
+    }
 
     return (
         <KeyboardAvoidingView style={{

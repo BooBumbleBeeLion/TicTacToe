@@ -31,29 +31,27 @@ export const AuthBtnTop = (props) => {
 
 const styles = StyleSheet.create({
     mainView: {
-        width: '100%',
         height: 45,
+        width: '100%',
+        justifyContent: 'flex-start',
+        alignItems: 'flex-start',
     },
     btnBack: {
-        marginLeft: 10,
         height: 45,
-        width: 110,
         flexDirection: 'row',
         backgroundColor: '#D4DDE1',
         borderRadius: 20,
+        padding: 5,
+        marginLeft: 10
     },
     image: {
-        marginTop: 5,
-        marginLeft: 5,
         height: 35,
         width: 35,
     },
     text: {
-        width: "50%",
         textAlign: 'center',
         textAlignVertical: 'center',
         color: '#000',
         fontSize: 20,
-        marginLeft: 10,
     },
 })
