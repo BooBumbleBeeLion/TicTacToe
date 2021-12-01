@@ -176,8 +176,12 @@ export class GameData {
                 .then(response => response.json())
                 .then(json => serverMessage = json)
 
-            if (serverMessage.hasOwnProperty("error"))
+            if (serverMessage.hasOwnProperty("error")) {
+                if (serverMessage["error"] === "Игр нет") {
+                    this.games = []
+                }
                 ToastAndroid.show(serverMessage["error"], ToastAndroid.LONG);
+            }
             else if(!serverMessage.hasOwnProperty("response"))
                 ToastAndroid.show("Не удалось загрузить игры из облака", ToastAndroid.LONG);
             else {
