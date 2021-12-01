@@ -55,6 +55,7 @@ export const TableScreen = (props) => {
 
     return (
         <View style={ styles.container }>
+            <BackBtnTop/>
             <FlatList
                 style={styles.flatList}
                 data={gameData}
@@ -69,9 +70,8 @@ export const TableScreen = (props) => {
                         {(GameData.isAuth &&
                             <TouchableOpacity 
                                 style={ styles.removeBtn }
-                                onPress={() => removeItem(item.id, item.matchid)}
-                            >
-                                <Text style={ styles.removeText }>REMOVE</Text>
+                                onPress={() => removeItem(item.id, item.matchid)}>
+                                <Text style={ styles.removeText }>Удалить</Text>
                             </TouchableOpacity>
                         )}
                         {(prev === item.id &&
@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
         width: '100%',
         alignItems: 'center',
         justifyContent: 'space-around',
-        paddingBottom: 25
+        padding: 20
     },
     prevContainer: {
         flex: 1,
@@ -108,10 +108,10 @@ const styles = StyleSheet.create({
         width: '100%',
         height: 30,
         backgroundColor: '#FF1E1E',
-        borderBottomLeftRadius: 20,
-        borderBottomRightRadius: 20,
         justifyContent: 'center',
         alignItems: 'center',
+        borderBottomLeftRadius: 20,
+        borderBottomRightRadius: 20,
     },
     removeText: {
         fontWeight: '700',

@@ -7,7 +7,7 @@ import {
     TextInput,
     Text,
     KeyboardAvoidingView,
-    ToastAndroid
+    ToastAndroid, BackHandler
 } from "react-native"
 import { BackBtnTop } from "../Widgets/BackBtnTop"
 import icon from '../../../assets/icon.png';
@@ -43,6 +43,11 @@ export const LoginScreen = () => {
                 }
             });
     }
+
+    BackHandler.addEventListener("hardwareBackPress", () => {
+        dispatch(setScreen(5))
+        return true
+    })
 
     return (
         <KeyboardAvoidingView style={{

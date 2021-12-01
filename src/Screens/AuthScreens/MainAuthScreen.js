@@ -7,10 +7,7 @@ import { BackBtnTop } from "../Widgets/BackBtnTop";
 
 export const MainAuthScreen = (props) => {
     return (
-        <View style={{
-            justifyContent: 'center',
-            alignItems: 'center'
-        }}>
+        <View style={styles.mainContainer}>
             <BackBtnTop/>
             <View style={ styles.navBar }>
                 <Image style={ styles.navImage } source={icon}/>
@@ -24,6 +21,13 @@ export const MainAuthScreen = (props) => {
 }
 
 const styles = StyleSheet.create({
+    mainContainer: {
+        flex: 1,
+        width: '100%',
+        alignItems: 'center',
+        justifyContent: 'space-around',
+        padding: 20
+    },
     navBar: {
         width: '100%',
         height: '90%',

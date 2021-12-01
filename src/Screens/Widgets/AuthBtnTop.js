@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, View, Image, TouchableOpacity, Text } from "react-native";
+import {StyleSheet, View, Image, TouchableOpacity, Text, Alert, ToastAndroid} from "react-native";
 import { setAuth, setScreen } from "../../store/reducers/ScreenSlice";
 import { useDispatch } from "react-redux";
 import { GameData } from "../../GameData";
@@ -13,8 +13,17 @@ export const AuthBtnTop = (props) => {
         if(props.title === "Войти"){
             dispatch(setScreen(props.id))
         } else {
-            GameData.logoutUser().then()
-            dispatch(setAuth(false))
+            Alert.alert(
+                "Удаление игры",
+                "Вы действительно хотите выйти из аккаунта?",
+                [
+                    {text: "Да", onPress: async () =>  {
+                            GameData.logoutUser().then()
+                            dispatch(setAuth(false))
+                        }},
+                    {text: "Нет", onPress: () => { return false }}
+                ]
+            )
         }
     }
 

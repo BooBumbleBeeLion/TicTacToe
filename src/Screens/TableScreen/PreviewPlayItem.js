@@ -13,8 +13,11 @@ import {GameData} from "../../GameData";
  * gameData[] - массив литерал объектов информации о партиях */
 export const PreviewPlayItem = ({ item }) => {
     return (
-        <View key={item.id} style={styles.mainItemBody}>
-            <View style={styles.endTypeGameBlock}>
+        <View key={item.id} style={{...styles.mainItemBody,
+            borderBottomLeftRadius: GameData.isAuth ? 0 : 20,
+            borderBottomRightRadius: GameData.isAuth ? 0 : 20,}}>
+            <View style={{...styles.endTypeGameBlock,
+                borderBottomLeftRadius: GameData.isAuth ? 0 : 20,}}>
                 <Image style={styles.image}
                        source={item.leftState === "Drawn" ? nothing : item.winner ? krest : circle}/>
             </View>
@@ -34,7 +37,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         backgroundColor: '#c4c4c4',
         borderTopLeftRadius: 20,
-        borderBottomLeftRadius: 20,
         borderTopRightRadius: 20,
         marginTop: 30,
     },
@@ -45,7 +47,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingLeft: 20,
         paddingRight: 20,
-        borderTopLeftRadius: 10,
+        borderTopLeftRadius: 20,
         backgroundColor: '#5C821A'
     },
     image:{

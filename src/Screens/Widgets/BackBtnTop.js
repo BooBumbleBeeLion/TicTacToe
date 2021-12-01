@@ -27,11 +27,10 @@ export const BackBtnTop = (props) => {
 
 const styles = StyleSheet.create({
     mainView: {
-        top: '3%',
+        top: '0%',
         width: '100%',
     },
     btnBack: {
-        margin: 10,
         width: 100,
         flexDirection: 'row',
     },
